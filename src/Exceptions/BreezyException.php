@@ -2,7 +2,7 @@
 
 namespace Draugiem\BreezySync\Exceptions;
 
-class BreezySyncException extends \Exception
+class BreezyException extends \Exception
 {
 
 }

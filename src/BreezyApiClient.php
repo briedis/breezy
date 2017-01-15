@@ -2,7 +2,8 @@
 
 namespace Draugiem\BreezySync;
 
-use Draugiem\BreezySync\Exceptions\BreezySyncException;
+use Draugiem\BreezySync\Exceptions\BreezyApiException;
+use Draugiem\BreezySync\Exceptions\BreezyException;
 
 /**
  * Class PrintfulClient
@@ -99,7 +100,7 @@ class BreezyApiClient
      * @param array $params
      * @param mixed $data
      * @return mixed
-     * @throws BreezySyncException
+     * @throws BreezyException
      */
     private function request($method, $path, array $params = [], $data = null)
     {
@@ -144,22 +145,22 @@ class BreezyApiClient
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         $responseRaw = curl_exec($curl);
-        $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);;
+
+        $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
         $errorNumber = curl_errno($curl);
         $error = curl_error($curl);
         curl_close($curl);
 
         if ($errorNumber) {
-            throw new BreezySyncException('CURL: ' . $error, $errorNumber);
+            throw new BreezyApiException('CURL: ' . $error, $errorNumber);
         }
 
         $response = json_decode($responseRaw, true);
 
         if ($responseCode >= 400 || !empty($response['error'])) {
-            throw new BreezySyncException($response['error'], $responseCode);
+            throw new BreezyApiException($response['error'], $responseCode);
         }
-
 
         $this->lastResponse = $response;
         $this->lastResponseRaw = $responseRaw;

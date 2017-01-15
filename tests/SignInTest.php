@@ -5,14 +5,14 @@ namespace Draugiem\BreezySync\Tests;
 
 
 use Draugiem\BreezySync\Breezy;
-use Draugiem\BreezySync\Exceptions\BreezySyncException;
+use Draugiem\BreezySync\Exceptions\BreezyException;
 
 class SignInTest extends TestBase
 {
 
     public function testSignInWithoutEmail()
     {
-        self::expectException(BreezySyncException::class);
+        self::expectException(BreezyException::class);
 
         $breezy = new Breezy;
         $breezy->singIn('', '');
