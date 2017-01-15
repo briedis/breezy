@@ -9,5 +9,18 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Draugiem\\BreezySync\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Draugiem\\BreezySync\\Tests\\": "tests/"
+        }
+    }
 }
