@@ -6,6 +6,7 @@ namespace Draugiem\BreezySync;
 
 use Draugiem\BreezySync\Exceptions\BreezyApiException;
 use Draugiem\BreezySync\Exceptions\BreezyException;
+use Draugiem\BreezySync\Structures\CandidateItem;
 use Draugiem\BreezySync\Structures\CompanyItem;
 use Draugiem\BreezySync\Structures\PositionItem;
 
@@ -65,6 +66,25 @@ class Breezy
     }
 
     /**
+     * @param CandidateItem $candidate
+     * @return CandidateItem
+     */
+    public function addCandidate(CandidateItem $candidate)
+    {
+        $path = '/company/' . $candidate->companyId . '/position/' . $candidate->positionId . '/candidates';
+
+        $rawCandidate = $this->api->post($path, [
+            'name' => $candidate->name,
+            'email_address' => $candidate->email,
+            'phone_number' => $candidate->phoneNumber,
+            'summary' => $candidate->summary,
+            'status' => $candidate->status,
+        ]);
+
+        return $this->getCandidateItem($rawCandidate);
+    }
+
+    /**
      * Newly created position
      * @param PositionItem $position
      * @throws BreezyException
@@ -94,10 +114,11 @@ class Breezy
      * @param array $rawPosition
      * @return PositionItem
      */
-    private function getPositionItem($rawPosition)
+    private function getPositionItem(array $rawPosition)
     {
         $position = new PositionItem;
 
+        $position->rawData = $rawPosition;
         $position->id = $rawPosition['_id'];
         $position->companyId = $rawPosition['company']['_id'];
         $position->name = $rawPosition['name'];
@@ -114,13 +135,14 @@ class Breezy
 
     /**
      * Convert company response to item
-     * @param $rawCompany
+     * @param array $rawCompany
      * @return CompanyItem
      */
-    private function getCompanyItem($rawCompany)
+    private function getCompanyItem(array $rawCompany)
     {
         $company = new CompanyItem;
 
+        $company->rawData = $rawCompany;
         $company->id = $rawCompany['_id'];
         $company->name = $rawCompany['name'];
         $company->description = $rawCompany['description'];
@@ -128,5 +150,25 @@ class Breezy
         $company->logo = $rawCompany['logo_url'];
 
         return $company;
+    }
+
+    /**
+     * Convert
+     * @param $rawCandidate
+     * @return CandidateItem
+     */
+    private function getCandidateItem(array $rawCandidate)
+    {
+        $candidate = new CandidateItem;
+
+        $candidate->rawData = $rawCandidate;
+        $candidate->name = $rawCandidate['name'];
+        $candidate->positionId = $rawCandidate['position_id'];
+        $candidate->email = $rawCandidate['email_address'];
+        $candidate->phoneNumber = $rawCandidate['phone_number'];
+        $candidate->status = $rawCandidate['status'];
+        $candidate->summary = $rawCandidate['summary'];
+
+        return $candidate;
     }
 }

@@ -4,7 +4,7 @@
 namespace Draugiem\BreezySync\Structures;
 
 
-class CompanyItem
+class CompanyItem extends BaseItem
 {
     /**
      * @var string

@@ -4,7 +4,7 @@
 namespace Draugiem\BreezySync\Structures;
 
 
-class PositionItem
+class PositionItem extends BaseItem
 {
     const STATE_DRAFT = 'draft';
     const STATE_PUBLISHED = 'published';

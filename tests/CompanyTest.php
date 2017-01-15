@@ -4,7 +4,7 @@
 namespace Draugiem\BreezySync\Tests;
 
 
-class CompanyRetrievalTest extends TestBase
+class CompanyTest extends TestBase
 {
 
     public function testAccessCompany()
@@ -16,5 +16,4 @@ class CompanyRetrievalTest extends TestBase
         // Dump if you wan't to
         // dump($position);
     }
-
 }
