@@ -1,0 +1,13 @@
+{
+    "name": "ideabits/breezy-sync",
+    "description": "Breezy sync tool",
+    "type": "library",
+    "authors": [
+        {
+            "name": "martins.briedis",
+            "email": "mbriedis@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
