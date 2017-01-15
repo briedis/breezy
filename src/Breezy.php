@@ -24,7 +24,7 @@ class Breezy
      * @param $password
      * @return mixed
      */
-    public function singIn($email, $password)
+    public function signIn($email, $password)
     {
         $response = $this->api->post('signin', [
             'email' => $email,
@@ -65,6 +65,31 @@ class Breezy
     }
 
     /**
+     * Newly created position
+     * @param PositionItem $position
+     * @throws BreezyException
+     * @return PositionItem Created position from backend
+     */
+    public function createPosition(PositionItem $position)
+    {
+        if (!$position->companyId) {
+            throw new BreezyException('Company id is not set');
+        }
+
+        $response = $this->api->post('company/' . $position->companyId . '/positions', [
+            'name' => $position->name,
+            'description' => $position->description,
+            'state' => $position->state,
+            'type' => [
+                'id' => 'fullTime',
+                'name' => 'Full-Time',
+            ],
+        ]);
+
+        return $this->getPositionItem($response);
+    }
+
+    /**
      * Convert position response to item
      * @param array $rawPosition
      * @return PositionItem
@@ -74,13 +99,15 @@ class Breezy
         $position = new PositionItem;
 
         $position->id = $rawPosition['_id'];
+        $position->companyId = $rawPosition['company']['_id'];
         $position->name = $rawPosition['name'];
-        $position->department = $rawPosition['department'];
+        $position->department = isset($rawPosition['department']) ? $rawPosition['department'] : '';
         $position->description = $rawPosition['description'];
         $position->type = $rawPosition['type']['name'];
-        $position->experience = $rawPosition['experience']['name'];
+        $position->experience = isset($rawPosition['experience']['name']) ? $rawPosition['experience']['name'] : '';
         $position->createdAt = strtotime($rawPosition['creation_date']);
         $position->updatedAt = strtotime($rawPosition['updated_date']);
+        $position->state = $rawPosition['state'];
 
         return $position;
     }

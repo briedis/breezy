@@ -6,11 +6,20 @@ namespace Draugiem\BreezySync\Structures;
 
 class PositionItem
 {
+    const STATE_DRAFT = 'draft';
+    const STATE_PUBLISHED = 'published';
+    const STATE_CLOSED = 'closed';
+
     /**
      * Internal ID
      * @var string
      */
     public $id;
+
+    /**
+     * @var string
+     */
+    public $companyId;
 
     /**
      * "Junior programmer", etc.
@@ -50,4 +59,18 @@ class PositionItem
      * @var int
      */
     public $createdAt;
+
+    /**
+     * State of current position
+     * @var string
+     */
+    public $state;
+
+    /**
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->state === self::STATE_PUBLISHED;
+    }
 }

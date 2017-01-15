@@ -15,13 +15,13 @@ class SignInTest extends TestBase
         self::expectException(BreezyException::class);
 
         $breezy = new Breezy;
-        $breezy->singIn('', '');
+        $breezy->signIn('', '');
     }
 
     public function testSignIn()
     {
         $breezy = new Breezy;
-        $token = $breezy->singIn(Credentials::$email, Credentials::$password);
+        $token = $breezy->signIn(Credentials::$email, Credentials::$password);
 
         self::assertNotNull($token);
     }

@@ -23,7 +23,7 @@ abstract class TestBase extends \PHPUnit_Framework_TestCase
     protected function breezy()
     {
         $breezy = new Breezy;
-        $breezy->singIn(Credentials::$email, Credentials::$password);
+        $breezy->signIn(Credentials::$email, Credentials::$password);
         return $breezy;
     }
 }
