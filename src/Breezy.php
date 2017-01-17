@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Draugiem\BreezySync;
+namespace Briedis\Breezy;
 
 
-use Draugiem\BreezySync\Exceptions\BreezyApiException;
-use Draugiem\BreezySync\Exceptions\BreezyException;
-use Draugiem\BreezySync\Structures\CandidateItem;
-use Draugiem\BreezySync\Structures\CompanyItem;
-use Draugiem\BreezySync\Structures\PositionItem;
+use Briedis\Breezy\Exceptions\BreezyApiException;
+use Briedis\Breezy\Exceptions\BreezyException;
+use Briedis\Breezy\Structures\CandidateItem;
+use Briedis\Breezy\Structures\CompanyItem;
+use Briedis\Breezy\Structures\PositionItem;
 
 class Breezy
 {

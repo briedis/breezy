@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Draugiem\BreezySync\Tests;
+namespace Briedis\Breezy\Tests;
 
 
-use Draugiem\BreezySync\Breezy;
-use Draugiem\BreezySync\Exceptions\BreezyException;
+use Briedis\Breezy\Breezy;
+use Briedis\Breezy\Exceptions\BreezyException;
 
 class SignInTest extends TestBase
 {

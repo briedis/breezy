@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Draugiem\BreezySync\Tests;
+namespace Briedis\Breezy\Tests;
 
 
-use Draugiem\BreezySync\Structures\CandidateItem;
+use Briedis\Breezy\Structures\CandidateItem;
 
 class AddCandidateTest extends TestBase
 {

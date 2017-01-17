@@ -16,12 +16,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Draugiem\\BreezySync\\": "src/"
+            "Briedis\\Breezy\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Draugiem\\BreezySync\\Tests\\": "tests/"
+            "Briedis\\Breezy\\Tests\\": "tests/"
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Draugiem\BreezySync\Exceptions;
+namespace Briedis\Breezy\Exceptions;
 
 class BreezyException extends \Exception
 {

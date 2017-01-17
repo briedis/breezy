@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Draugiem\BreezySync\Tests;
+namespace Briedis\Breezy\Tests;
 
 
-use Draugiem\BreezySync\Structures\PositionItem;
+use Briedis\Breezy\Structures\PositionItem;
 
 class CreatePositionTest extends TestBase
 {

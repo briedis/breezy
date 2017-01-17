@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Draugiem\BreezySync\Tests;
+namespace Briedis\Breezy\Tests;
 
 
 class CompanyTest extends TestBase

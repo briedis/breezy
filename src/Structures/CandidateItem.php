@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Draugiem\BreezySync\Structures;
+namespace Briedis\Breezy\Structures;
 
 
 class CandidateItem extends BaseItem

@@ -1,16 +1,16 @@
 <?php
 
-namespace Draugiem\BreezySync;
+namespace Briedis\Breezy;
 
-use Draugiem\BreezySync\Exceptions\BreezyApiException;
-use Draugiem\BreezySync\Exceptions\BreezyException;
+use Briedis\Breezy\Exceptions\BreezyApiException;
+use Briedis\Breezy\Exceptions\BreezyException;
 
 /**
  * Class PrintfulClient
  */
 class BreezyApiClient
 {
-    const USER_AGENT = 'BreezySync by Draugiem';
+    const USER_AGENT = 'Breezy PHP wrapper (https://github.com/briedis/breezy)';
 
     public $url = 'https://breezy.hr/public/api/v2/';
 

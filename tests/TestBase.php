@@ -1,9 +1,9 @@
 <?php
 
-namespace Draugiem\BreezySync\Tests;
+namespace Briedis\Breezy\Tests;
 
 
-use Draugiem\BreezySync\Breezy;
+use Briedis\Breezy\Breezy;
 
 abstract class TestBase extends \PHPUnit_Framework_TestCase
 {
