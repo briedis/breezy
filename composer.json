@@ -8,8 +8,11 @@
             "email": "mbriedis@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
-    "require": {},
+    "require": {
+        "php": ">=5.5.0",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
         "symfony/var-dumper": "^3.2"
@@ -23,5 +26,6 @@
         "psr-4": {
             "Briedis\\Breezy\\Tests\\": "tests/"
         }
-    }
+    },
+    "minimum-stability": "stable"
 }

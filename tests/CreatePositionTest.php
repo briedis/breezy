@@ -21,6 +21,6 @@ class CreatePositionTest extends TestBase
 
         $created = $breezy->createPosition($position);
 
-        dump($created);
+        // dump($created);
     }
 }

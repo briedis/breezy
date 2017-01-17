@@ -4,18 +4,27 @@ namespace Briedis\Breezy;
 
 use Briedis\Breezy\Exceptions\BreezyApiException;
 use Briedis\Breezy\Exceptions\BreezyException;
+use CURLFile;
 
-/**
- * Class PrintfulClient
- */
 class BreezyApiClient
 {
     const USER_AGENT = 'Breezy PHP wrapper (https://github.com/briedis/breezy)';
 
+    /**
+     * @var string
+     */
     public $url = 'https://breezy.hr/public/api/v2/';
 
+    /**
+     * Last JSON encoded response
+     * @var string
+     */
     private $lastResponseRaw;
 
+    /**
+     * Last parsed response (json decoded)
+     * @var array
+     */
     private $lastResponse;
 
     /**
@@ -24,6 +33,11 @@ class BreezyApiClient
      */
     private $token;
 
+    /**
+     * Set access (authorization) token to be used when calling requests
+     * Token can be retrieved from signIn method
+     * @param string $token
+     */
     public function setToken($token)
     {
         $this->token = $token;
@@ -104,10 +118,7 @@ class BreezyApiClient
      */
     private function request($method, $path, array $query = [], $data = null)
     {
-        $this->lastResponseRaw = null;
-        $this->lastResponse = null;
-
-        $curl = $this->initCurl($path, $query, $method);
+        $curl = $this->initCurl($method, $path, $query);
 
         $bodyLength = 0;
         if ($data !== null) {
@@ -116,17 +127,91 @@ class BreezyApiClient
             curl_setopt($curl, CURLOPT_POSTFIELDS, $bodyEncoded);
         }
 
-        $headers = [
-            'Content-Type: application/json',
-            'Content-Length: ' . $bodyLength,
-
-        ];
-
-        if ($this->token) {
-            $headers[] = 'Authorization: ' . $this->token;
-        }
+        $headers = $this->getCurlHeaders($bodyLength, 'application/json');
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+        return $this->execute($curl);
+    }
+
+    /**
+     * Upload file contents
+     * @param string $path
+     * @param string $pathname Full path to the file to upload
+     * @param string $filename
+     * @param array $query
+     * @return mixed
+     */
+    public function uploadFile($path, $pathname, $filename, array $query = [])
+    {
+        $curlFile = new CURLFile($pathname);
+        $curlFile->setPostFilename($filename);
+
+        $curl = curl_init($this->getUrl($path, $query));
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_USERAGENT, self::USER_AGENT);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            'Content-Type: multipart/form-data',
+            'Authorization: ' . $this->token,
+        ]);
+        curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
+        curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, ['file' => $curlFile]);
+
+        return $this->execute($curl);
+    }
+
+
+    /**
+     * @param string $method
+     * @param string $path
+     * @param array $query Query parameters
+     * @return resource cURL handler
+     */
+    private function initCurl($method, $path, array $query)
+    {
+        $curl = curl_init($this->getUrl($path, $query));
+
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 20);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+
+        curl_setopt($curl, CURLOPT_USERAGENT, self::USER_AGENT);
+
+        return $curl;
+    }
+
+    /**
+     * @param string $path
+     * @param array $query
+     * @return string
+     */
+    private function getUrl($path, array $query)
+    {
+        $url = $this->url . trim($path, '/');
+        if ($query) {
+            $url .= '?' . http_build_query($query);
+        }
+        return $url;
+    }
+
+    /**
+     * Execute cURL handler and return response
+     * @param resource $curl
+     * @return mixed
+     * @throws BreezyApiException
+     */
+    private function execute($curl)
+    {
+        $this->lastResponseRaw = null;
+        $this->lastResponse = null;
 
         $responseRaw = curl_exec($curl);
 
@@ -153,32 +238,22 @@ class BreezyApiClient
     }
 
     /**
-     * @param string $path
-     * @param array $query Query parameters
-     * @param string $method
-     * @return resource cURL handler
+     * @param int $contentLength
+     * @param string $contentType
+     * @return array
      */
-    private function initCurl($path, array $query, $method)
+    private function getCurlHeaders($contentLength, $contentType)
     {
-        $url = $this->url . trim($path, '/');
+        $headers = [
+            'Content-Type: ' . $contentType,
+            'Content-Length: ' . $contentLength,
+        ];
 
-        if ($query) {
-            $url .= '?' . http_build_query($query);
+        if ($this->token) {
+            $headers[] = 'Authorization: ' . $this->token;
         }
 
-        $curl = curl_init($url);
-
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
-
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 20);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 20);
-
-        curl_setopt($curl, CURLOPT_USERAGENT, self::USER_AGENT);
-
-        return $curl;
+        return $headers;
     }
 
     /**

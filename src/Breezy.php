@@ -9,6 +9,7 @@ use Briedis\Breezy\Exceptions\BreezyException;
 use Briedis\Breezy\Structures\CandidateItem;
 use Briedis\Breezy\Structures\CompanyItem;
 use Briedis\Breezy\Structures\PositionItem;
+use Briedis\Breezy\Structures\ResumeItem;
 
 class Breezy
 {
@@ -75,6 +76,24 @@ class Breezy
         ]);
 
         return CandidateItem::fromArray($rawCandidate);
+    }
+
+    /**
+     * Create a new resume file, which can later be used when adding a candidate to a position
+     * @param string $companyId
+     * @param string $pathname Full path to the file
+     * @param string $filename Actual files filename that will appear in the system
+     * @return ResumeItem
+     */
+    public function uploadResume($companyId, $pathname, $filename)
+    {
+        $response = $this->api->uploadFile(
+            'company/' . $companyId . '/upload/resume',
+            $pathname,
+            $filename
+        );
+
+        return ResumeItem::fromArray($response);
     }
 
     /**
