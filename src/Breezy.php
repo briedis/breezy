@@ -46,10 +46,10 @@ class Breezy
         $re = [];
 
         foreach ($response as $v) {
-            $company = $this->getCompanyItem($v['company']);
+            $company = CompanyItem::fromArray($v['company']);
 
             foreach ($v['positions'] as $v2) {
-                $company->positions[] = $this->getPositionItem($v2);
+                $company->positions[] = PositionItem::fromArray($v2);
             }
 
             $re[] = $company;
@@ -74,7 +74,7 @@ class Breezy
             'status' => $candidate->status,
         ]);
 
-        return $this->getCandidateItem($rawCandidate);
+        return CandidateItem::fromArray($rawCandidate);
     }
 
     /**
@@ -99,69 +99,6 @@ class Breezy
             ],
         ]);
 
-        return $this->getPositionItem($response);
-    }
-
-    /**
-     * Convert position response to item
-     * @param array $rawPosition
-     * @return PositionItem
-     */
-    private function getPositionItem(array $rawPosition)
-    {
-        $position = new PositionItem;
-
-        $position->rawData = $rawPosition;
-        $position->id = $rawPosition['_id'];
-        $position->companyId = $rawPosition['company']['_id'];
-        $position->name = $rawPosition['name'];
-        $position->department = isset($rawPosition['department']) ? $rawPosition['department'] : '';
-        $position->description = $rawPosition['description'];
-        $position->type = $rawPosition['type']['name'];
-        $position->experience = isset($rawPosition['experience']['name']) ? $rawPosition['experience']['name'] : '';
-        $position->createdAt = strtotime($rawPosition['creation_date']);
-        $position->updatedAt = strtotime($rawPosition['updated_date']);
-        $position->state = $rawPosition['state'];
-
-        return $position;
-    }
-
-    /**
-     * Convert company response to item
-     * @param array $rawCompany
-     * @return CompanyItem
-     */
-    private function getCompanyItem(array $rawCompany)
-    {
-        $company = new CompanyItem;
-
-        $company->rawData = $rawCompany;
-        $company->id = $rawCompany['_id'];
-        $company->name = $rawCompany['name'];
-        $company->description = $rawCompany['description'];
-        $company->url = $rawCompany['url'];
-        $company->logo = $rawCompany['logo_url'];
-
-        return $company;
-    }
-
-    /**
-     * Convert
-     * @param $rawCandidate
-     * @return CandidateItem
-     */
-    private function getCandidateItem(array $rawCandidate)
-    {
-        $candidate = new CandidateItem;
-
-        $candidate->rawData = $rawCandidate;
-        $candidate->name = $rawCandidate['name'];
-        $candidate->positionId = $rawCandidate['position_id'];
-        $candidate->email = $rawCandidate['email_address'];
-        $candidate->phoneNumber = $rawCandidate['phone_number'];
-        $candidate->status = $rawCandidate['status'];
-        $candidate->summary = $rawCandidate['summary'];
-
-        return $candidate;
+        return PositionItem::fromArray($response);
     }
 }

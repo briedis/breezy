@@ -73,4 +73,26 @@ class PositionItem extends BaseItem
     {
         return $this->state === self::STATE_PUBLISHED;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public static function fromArray(array $rawPosition)
+    {
+        $position = new PositionItem;
+
+        $position->rawData = $rawPosition;
+        $position->id = $rawPosition['_id'];
+        $position->companyId = $rawPosition['company']['_id'];
+        $position->name = $rawPosition['name'];
+        $position->department = isset($rawPosition['department']) ? $rawPosition['department'] : '';
+        $position->description = $rawPosition['description'];
+        $position->type = $rawPosition['type']['name'];
+        $position->experience = isset($rawPosition['experience']['name']) ? $rawPosition['experience']['name'] : '';
+        $position->createdAt = strtotime($rawPosition['creation_date']);
+        $position->updatedAt = strtotime($rawPosition['updated_date']);
+        $position->state = $rawPosition['state'];
+
+        return $position;
+    }
 }

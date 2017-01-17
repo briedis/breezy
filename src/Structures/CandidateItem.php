@@ -52,4 +52,22 @@ class CandidateItem extends BaseItem
      * @var string
      */
     public $summary;
+
+    /**
+     * @inheritdoc
+     */
+    public static function fromArray(array $rawCandidate)
+    {
+        $candidate = new CandidateItem;
+
+        $candidate->rawData = $rawCandidate;
+        $candidate->name = $rawCandidate['name'];
+        $candidate->positionId = $rawCandidate['position_id'];
+        $candidate->email = $rawCandidate['email_address'];
+        $candidate->phoneNumber = $rawCandidate['phone_number'];
+        $candidate->status = $rawCandidate['status'];
+        $candidate->summary = $rawCandidate['summary'];
+
+        return $candidate;
+    }
 }

@@ -38,4 +38,22 @@ class CompanyItem extends BaseItem
      * @var PositionItem[]
      */
     public $positions = [];
+
+
+    /**
+     * @inheritdoc
+     */
+    public static function fromArray(array $rawCompany)
+    {
+        $company = new CompanyItem;
+
+        $company->rawData = $rawCompany;
+        $company->id = $rawCompany['_id'];
+        $company->name = $rawCompany['name'];
+        $company->description = $rawCompany['description'];
+        $company->url = $rawCompany['url'];
+        $company->logo = $rawCompany['logo_url'];
+
+        return $company;
+    }
 }
