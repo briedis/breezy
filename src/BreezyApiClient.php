@@ -96,34 +96,18 @@ class BreezyApiClient
     /**
      * Internal request implementation
      * @param string $method POST, GET, etc.
-     * @param string $path
-     * @param array $params
-     * @param mixed $data
+     * @param string $path API endpoint path
+     * @param array $query Query parameters
+     * @param array|mixed $data Post data
      * @return mixed
      * @throws BreezyException
      */
-    private function request($method, $path, array $params = [], $data = null)
+    private function request($method, $path, array $query = [], $data = null)
     {
         $this->lastResponseRaw = null;
         $this->lastResponse = null;
 
-        $url = trim($path, '/');
-
-        if (!empty($params)) {
-            $url .= '?' . http_build_query($params);
-        }
-
-        $curl = curl_init($this->url . $url);
-
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
-
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 20);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 20);
-
-        curl_setopt($curl, CURLOPT_USERAGENT, self::USER_AGENT);
+        $curl = $this->initCurl($path, $query, $method);
 
         $bodyLength = 0;
         if ($data !== null) {
@@ -166,6 +150,35 @@ class BreezyApiClient
         $this->lastResponseRaw = $responseRaw;
 
         return $response;
+    }
+
+    /**
+     * @param string $path
+     * @param array $query Query parameters
+     * @param string $method
+     * @return resource cURL handler
+     */
+    private function initCurl($path, array $query, $method)
+    {
+        $url = $this->url . trim($path, '/');
+
+        if ($query) {
+            $url .= '?' . http_build_query($query);
+        }
+
+        $curl = curl_init($url);
+
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 20);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 20);
+
+        curl_setopt($curl, CURLOPT_USERAGENT, self::USER_AGENT);
+
+        return $curl;
     }
 
     /**
