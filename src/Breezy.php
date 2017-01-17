@@ -21,21 +21,14 @@ class Breezy
     }
 
     /**
-     * @param $email
-     * @param $password
-     * @return mixed
+     * Sign in and set access token so consecutive requests are authorized
+     * @param string $email
+     * @param string $password
+     * @return string Access token
      */
     public function signIn($email, $password)
     {
-        $response = $this->api->post('signin', [
-            'email' => $email,
-            'password' => $password,
-        ]);
-
-        $token = $response['access_token'];
-
-        // Remember token for all consecutive request
-        $this->api->setToken($token);
+        $token = $this->api->signIn($email, $password);
 
         return $token;
     }

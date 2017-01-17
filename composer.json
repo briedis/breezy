@@ -1,6 +1,6 @@
 {
-    "name": "briedis/breezy-sync",
-    "description": "Breezy sync tool",
+    "name": "briedis/breezy",
+    "description": "Simple breezy.hr API wrapper",
     "type": "library",
     "authors": [
         {

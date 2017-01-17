@@ -167,4 +167,25 @@ class BreezyApiClient
 
         return $response;
     }
+
+    /**
+     * Sign in and set access token for consecutive requests
+     * @param string $email
+     * @param string $password
+     * @return string Access token
+     */
+    public function signIn($email, $password)
+    {
+        $response = $this->post('signin', [
+            'email' => $email,
+            'password' => $password,
+        ]);
+
+        $token = $response['access_token'];
+
+        // Remember token for all consecutive request
+        $this->setToken($token);
+
+        return $token;
+    }
 }
