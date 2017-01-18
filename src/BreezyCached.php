@@ -4,6 +4,7 @@
 namespace Briedis\Breezy;
 
 
+use Briedis\Breezy\Exceptions\BreezyException;
 use Briedis\Breezy\Structures\CompanyItem;
 use Briedis\Breezy\Structures\PositionItem;
 
@@ -27,7 +28,10 @@ class BreezyCached extends Breezy
     }
 
     /**
-     * @inheritdoc
+     * Sign in and set access token so consecutive requests are authorized
+     * @param string $email
+     * @param string $password
+     * @return string Access token
      */
     public function signIn($email, $password)
     {
@@ -48,7 +52,9 @@ class BreezyCached extends Breezy
     }
 
     /**
-     * @inheritdoc
+     * Get company data
+     * @param string $companyId
+     * @return CompanyItem
      */
     public function getCompany($companyId)
     {
@@ -67,7 +73,10 @@ class BreezyCached extends Breezy
     }
 
     /**
-     * @inheritdoc
+     * Get positions
+     * @param string $companyId
+     * @param string $state State of the position (draft, archived, etc). By default, returns only published. Pass an empty string if you want all
+     * @return PositionItem[]
      */
     public function getCompanyPositions($companyId, $state = PositionItem::STATE_PUBLISHED)
     {
@@ -93,7 +102,10 @@ class BreezyCached extends Breezy
     }
 
     /**
-     * @inheritdoc
+     * Newly created position
+     * @param PositionItem $position
+     * @throws BreezyException
+     * @return PositionItem Created position from backend
      */
     public function createPosition(PositionItem $position)
     {

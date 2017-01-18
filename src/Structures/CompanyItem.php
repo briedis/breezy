@@ -34,13 +34,6 @@ class CompanyItem extends BaseItem
     public $logo;
 
     /**
-     * Published positions
-     * @var PositionItem[]
-     */
-    public $positions = [];
-
-
-    /**
      * @inheritdoc
      */
     public static function fromArray(array $rawCompany)
