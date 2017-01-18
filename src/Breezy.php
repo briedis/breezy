@@ -13,6 +13,12 @@ use Briedis\Breezy\Structures\ResumeItem;
 
 class Breezy
 {
+    /**
+     * List of allowed extensions for the resume
+     * @var array
+     */
+    public static $allowedResumeExtensions = ['pdf', 'doc', 'docx', 'txt', 'rtf'];
+
     /** @var BreezyApiClient */
     private $api;
 
@@ -61,19 +67,28 @@ class Breezy
 
     /**
      * @param CandidateItem $candidate
+     * @param ResumeItem $resume Optional resume
      * @return CandidateItem
      */
-    public function addCandidate(CandidateItem $candidate)
+    public function addCandidate(CandidateItem $candidate, ResumeItem $resume = null)
     {
         $path = '/company/' . $candidate->companyId . '/position/' . $candidate->positionId . '/candidates';
 
-        $rawCandidate = $this->api->post($path, [
+        $data = [
             'name' => $candidate->name,
             'email_address' => $candidate->email,
             'phone_number' => $candidate->phoneNumber,
             'summary' => $candidate->summary,
             'status' => $candidate->status,
-        ]);
+        ];
+
+        if ($resume) {
+            $data['resume'] = [
+                'url' => $resume->url,
+            ];
+        }
+
+        $rawCandidate = $this->api->post($path, $data);
 
         return CandidateItem::fromArray($rawCandidate);
     }
@@ -84,9 +99,19 @@ class Breezy
      * @param string $pathname Full path to the file
      * @param string $filename Actual files filename that will appear in the system
      * @return ResumeItem
+     * @throws BreezyException
      */
     public function uploadResume($companyId, $pathname, $filename)
     {
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+        if (!in_array($extension, self::$allowedResumeExtensions, true)) {
+            throw new BreezyException(
+                'Extension "' . $extension . '" is not within allowed list: '
+                . implode(', ', self::$allowedResumeExtensions)
+            );
+        }
+
         $response = $this->api->uploadFile(
             'company/' . $companyId . '/upload/resume',
             $pathname,

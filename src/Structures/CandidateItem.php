@@ -54,6 +54,18 @@ class CandidateItem extends BaseItem
     public $summary;
 
     /**
+     * If resume exists, full URL will be here (public)
+     * @var string|null
+     */
+    public $resumeUrl;
+
+    /**
+     * If resume exists, pdf converted full URL will be here (public)
+     * @var string|null
+     */
+    public $resumeUrlPdf;
+
+    /**
      * @inheritdoc
      */
     public static function fromArray(array $rawCandidate)
@@ -67,6 +79,11 @@ class CandidateItem extends BaseItem
         $candidate->phoneNumber = $rawCandidate['phone_number'];
         $candidate->status = $rawCandidate['status'];
         $candidate->summary = $rawCandidate['summary'];
+
+        if (!empty($rawCandidate['resume'])) {
+            $candidate->resumeUrl = $rawCandidate['resume']['url'];
+            $candidate->resumeUrlPdf = $rawCandidate['resume']['pdf_url'];
+        }
 
         return $candidate;
     }
