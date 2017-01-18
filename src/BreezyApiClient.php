@@ -195,7 +195,7 @@ class BreezyApiClient
      */
     private function getUrl($path, array $query)
     {
-        $url = $this->url . trim($path, '/');
+        $url = $this->url . ltrim($path, '/');
         if ($query) {
             $url .= '?' . http_build_query($query);
         }

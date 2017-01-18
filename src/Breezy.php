@@ -6,6 +6,7 @@ namespace Briedis\Breezy;
 
 use Briedis\Breezy\Exceptions\BreezyException;
 use Briedis\Breezy\Structures\CandidateItem;
+use Briedis\Breezy\Structures\CompanyItem;
 use Briedis\Breezy\Structures\PositionItem;
 use Briedis\Breezy\Structures\ResumeItem;
 
@@ -36,6 +37,17 @@ class Breezy
         $token = $this->api->signIn($email, $password);
 
         return $token;
+    }
+
+    /**
+     * Get company data
+     * @param string $companyId
+     * @return CompanyItem
+     */
+    public function getCompany($companyId)
+    {
+        $response = $this->api->get('company/' . $companyId . '/'); // Trailing slash is needed for this request until it's fixed
+        return CompanyItem::fromArray($response);
     }
 
     /**
