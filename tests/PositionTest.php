@@ -8,6 +8,21 @@ use Briedis\Breezy\Structures\PositionItem;
 
 class PositionTest extends TestBase
 {
+    public function testCreatePosition()
+    {
+        $breezy = $this->breezy();
+
+        $position = new PositionItem;
+        $position->companyId = Credentials::$companyId;
+        $position->name = 'Test API position (' . uniqid(date('r') . '_', true) . ')';
+        $position->description = 'Test description';
+        $position->state = PositionItem::STATE_CLOSED;
+
+        $created = $breezy->createPosition($position);
+
+        self::assertNotNull($created->id);
+        self::assertEquals(PositionItem::STATE_CLOSED, $created->state);
+    }
 
     public function testGetAllPositions()
     {
