@@ -25,6 +25,8 @@ class ResumeItem extends BaseItem
     {
         $resume = new ResumeItem;
 
+        $resume->rawData = $rawResume;
+
         $resume->url = $rawResume['url'];
         $resume->size = $rawResume['file_size'];
 

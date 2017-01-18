@@ -48,6 +48,7 @@ class CompanyItem extends BaseItem
         $company = new CompanyItem;
 
         $company->rawData = $rawCompany;
+
         $company->id = $rawCompany['_id'];
         $company->name = $rawCompany['name'];
         $company->description = $rawCompany['description'];

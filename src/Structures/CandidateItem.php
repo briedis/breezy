@@ -73,6 +73,7 @@ class CandidateItem extends BaseItem
         $candidate = new CandidateItem;
 
         $candidate->rawData = $rawCandidate;
+
         $candidate->name = $rawCandidate['name'];
         $candidate->positionId = $rawCandidate['position_id'];
         $candidate->email = $rawCandidate['email_address'];

@@ -82,6 +82,7 @@ class PositionItem extends BaseItem
         $position = new PositionItem;
 
         $position->rawData = $rawPosition;
+
         $position->id = $rawPosition['_id'];
         $position->companyId = $rawPosition['company']['_id'];
         $position->name = $rawPosition['name'];
