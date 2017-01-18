@@ -4,10 +4,8 @@
 namespace Briedis\Breezy;
 
 
-use Briedis\Breezy\Exceptions\BreezyApiException;
 use Briedis\Breezy\Exceptions\BreezyException;
 use Briedis\Breezy\Structures\CandidateItem;
-use Briedis\Breezy\Structures\CompanyItem;
 use Briedis\Breezy\Structures\PositionItem;
 use Briedis\Breezy\Structures\ResumeItem;
 
@@ -41,25 +39,25 @@ class Breezy
     }
 
     /**
-     * Get companies with positions
-     * @return CompanyItem[]
-     * @throws BreezyApiException
-     * @throws BreezyException
+     * Get positions
+     * @param string $companyId
+     * @param string $state State of the position (draft, archived, etc). By default, returns only published. Pass an empty string if you want all
+     * @return PositionItem[]
      */
-    public function getCompaniesWithPositions()
+    public function getCompanyPositions($companyId, $state = PositionItem::STATE_PUBLISHED)
     {
-        $response = $this->api->get('user/details');
+        $params = [];
+
+        if ($state) {
+            $params['state'] = $state;
+        }
+
+        $response = $this->api->get('company/' . $companyId . '/positions', $params);
 
         $re = [];
 
         foreach ($response as $v) {
-            $company = CompanyItem::fromArray($v['company']);
-
-            foreach ($v['positions'] as $v2) {
-                $company->positions[] = PositionItem::fromArray($v2);
-            }
-
-            $re[] = $company;
+            $re[] = PositionItem::fromArray($v);
         }
 
         return $re;

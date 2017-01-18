@@ -16,6 +16,6 @@ class AccessCompanyUnauthorizedTest extends TestBase
 
         self::expectException(BreezyApiException::class);
 
-        $breezy->getCompaniesWithPositions();
+        $breezy->getCompanyPositions(Credentials::$companyId);
     }
 }
