@@ -19,11 +19,15 @@ class Breezy
     public static $allowedResumeExtensions = ['pdf', 'doc', 'docx', 'txt', 'rtf'];
 
     /** @var BreezyApiClient */
-    private $api;
+    protected $api;
 
-    public function __construct()
+    /**
+     * If api implementation is not provided, we initialize it in constructor
+     * @param BreezyApiClient|null $apiClient
+     */
+    public function __construct(BreezyApiClient $apiClient = null)
     {
-        $this->api = new BreezyApiClient;
+        $this->api = $apiClient ? $apiClient : new BreezyApiClient;
     }
 
     /**

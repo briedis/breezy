@@ -1,0 +1,116 @@
+<?php
+
+
+namespace Briedis\Breezy;
+
+
+use Briedis\Breezy\Structures\CompanyItem;
+use Briedis\Breezy\Structures\PositionItem;
+
+/**
+ * Class that wraps Breezy and allows to add a cached layer for methods to get token, positions etc.
+ */
+class BreezyCached extends Breezy
+{
+    /** @var CacheAdapterInterface */
+    private $cache;
+
+    /**
+     * Pass the cache handler that will perform caching
+     * @param CacheAdapterInterface $cache
+     * @param BreezyApiClient|null $apiClient Default client is used if nothing is provided
+     */
+    public function __construct(CacheAdapterInterface $cache, BreezyApiClient $apiClient = null)
+    {
+        parent::__construct($apiClient);
+        $this->cache = $cache;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function signIn($email, $password)
+    {
+        $key = 'token:' . sha1($email . $password);
+
+        $token = $this->cache->get($key);
+
+        if ($token) {
+            $this->api->setToken($token);
+            return $token;
+        }
+
+        $token = parent::signIn($email, $password);
+
+        $this->cache->set($key, $token, 10 * 60);
+
+        return $token;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompany($companyId)
+    {
+        $key = 'company:' . $companyId;
+
+        $rawCompany = $this->cache->get($key);
+        if (is_array($rawCompany)) {
+            return CompanyItem::fromArray($rawCompany);
+        }
+
+        $company = parent::getCompany($companyId);
+
+        $this->cache->set($key, $company->rawData, 30 * 60);
+
+        return $company;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompanyPositions($companyId, $state = PositionItem::STATE_PUBLISHED)
+    {
+        $key = $this->getCompanyPositionKey($companyId, $state);
+
+        $rawPositions = $this->cache->get($key);
+
+        if (is_array($rawPositions)) {
+            return array_map(function (array $rawPosition) {
+                return PositionItem::fromArray($rawPosition);
+            }, $rawPositions);
+        }
+
+        $positions = parent::getCompanyPositions($companyId, $state);
+
+        $rawPositions = array_map(function (PositionItem $position) {
+            return $position->rawData;
+        }, $positions);
+
+        $this->cache->set($key, $rawPositions, 10 * 60);
+
+        return $positions;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createPosition(PositionItem $position)
+    {
+        $this->cache->forget(
+            $this->getCompanyPositionKey($position->companyId, $position->state)
+        );
+
+        return parent::createPosition($position);
+    }
+
+    /**
+     * @param string $companyId
+     * @param string $state
+     * @return string
+     */
+    private function getCompanyPositionKey($companyId, $state)
+    {
+        return 'positions:' . $companyId . ':' . $state;
+    }
+}
