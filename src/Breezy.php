@@ -147,7 +147,7 @@ class Breezy
             throw new BreezyException('Company id is not set');
         }
 
-        $response = $this->api->post('company/' . $position->companyId . '/positions', [
+        $data = [
             'name' => $position->name,
             'description' => $position->description,
             'state' => $position->state,
@@ -155,7 +155,29 @@ class Breezy
                 'id' => 'fullTime',
                 'name' => 'Full-Time',
             ],
-        ]);
+        ];
+
+        $location = $position->location;
+        if ($location) {
+            $rawLocation = [
+                'country' => [
+                    'id' => $location->countryCode,
+                    'name' => $location->countryName,
+                ],
+            ];
+            if ($location->city) {
+                $rawLocation['city'] = $location->city;
+            }
+            if ($location->stateName) {
+                $rawLocation['state'] = [
+                    'id' => $location->stateCode,
+                    'name' => $location->stateName,
+                ];
+            }
+            $data['location'] = $rawLocation;
+        }
+
+        $response = $this->api->post('company/' . $position->companyId . '/positions', $data);
 
         return PositionItem::fromArray($response);
     }

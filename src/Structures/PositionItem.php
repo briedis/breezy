@@ -67,6 +67,12 @@ class PositionItem extends BaseItem
     public $state;
 
     /**
+     * Optional location, if available
+     * @var LocationItem|null
+     */
+    public $location;
+
+    /**
      * @return bool
      */
     public function isPublished()
@@ -93,6 +99,10 @@ class PositionItem extends BaseItem
         $position->createdAt = strtotime($rawPosition['creation_date']);
         $position->updatedAt = strtotime($rawPosition['updated_date']);
         $position->state = $rawPosition['state'];
+
+        if (isset($rawPosition['location'])) {
+            $position->location = LocationItem::fromArray($rawPosition['location']);
+        }
 
         return $position;
     }
