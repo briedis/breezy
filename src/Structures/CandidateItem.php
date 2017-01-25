@@ -84,7 +84,9 @@ class CandidateItem extends BaseItem
 
         if (!empty($rawCandidate['resume'])) {
             $candidate->resumeUrl = $rawCandidate['resume']['url'];
-            $candidate->resumeUrlPdf = $rawCandidate['resume']['pdf_url'];
+            if (!empty($rawCandidate['resume']['pdf_url'])) {
+                $candidate->resumeUrlPdf = $rawCandidate['resume']['pdf_url'];
+            }
         }
 
         return $candidate;
