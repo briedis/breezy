@@ -24,7 +24,10 @@ class AddCandidateTest extends TestBase
         $candidate->summary = "Test summary\nNew line";
         $candidate->phoneNumber = '12345667890';
 
-        $breezy->addCandidate($candidate);
+        $newCandidate = $breezy->addCandidate($candidate);
+
+        self::assertNotNull($newCandidate->id);
+        self::assertEquals($candidate->name, $newCandidate->name);
     }
 
     public function testAddCandidateWithResume()
