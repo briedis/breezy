@@ -198,9 +198,9 @@ class PositionItem extends BaseItem
         $position->state = $rawPosition['state'];
         $position->name = $rawPosition['name'];
         $position->friendly_id = $rawPosition['friendly_id'];
-        $position->experience = $rawPosition['experience'];
+        $position->experience = isset($rawPosition['experience']) ? $rawPosition['experience'] : null;
         $position->location = $rawPosition['location'];
-        $position->education = $rawPosition['education'];
+        $position->education = isset($rawPosition['education']) ? $rawPosition['education'] : null;
         $position->department = $rawPosition['department'];
         $position->requisition_id = $rawPosition['requisition_id'];
         $position->description = $rawPosition['description'];
@@ -209,11 +209,11 @@ class PositionItem extends BaseItem
         $position->creator_id = $rawPosition['creator_id'];
         $position->creation_date = $rawPosition['creation_date'];
         $position->updated_date = $rawPosition['updated_date'];
-        $position->questionnaire_id = $rawPosition['questionnaire_id'];
-        $position->scorecard_id = $rawPosition['scorecard_id'];
+        $position->questionnaire_id = isset($rawPosition['questionnaire_id']) ? $rawPosition['questionnaire_id'] : null;
+        $position->scorecard_id = isset($rawPosition['scorecard_id']) ? $rawPosition['scorecard_id'] : null;
         $position->all_users = $rawPosition['all_users'];
         $position->all_admins = $rawPosition['all_admins'];
-        $position->pipeline_id = $rawPosition['pipeline_id'];
+        $position->pipeline_id = isset($rawPosition['pipeline_id']) ? $rawPosition['pipeline_id'] : null;
         $position->candidate_type = $rawPosition['candidate_type'];
 
         return $position;
