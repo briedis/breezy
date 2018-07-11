@@ -9,29 +9,37 @@ class CompanyItem extends BaseItem
     /**
      * @var string
      */
-    public $id;
+    public $id = '';
 
     /**
      * @var string
      */
-    public $name;
+    public $name = '';
 
     /**
-     * Company description
      * @var string
      */
-    public $description;
+    public $friendly_id = '';
 
     /**
-     * Company URL
      * @var string
      */
-    public $url;
+    public $creation_date = '';
 
     /**
-     * @var string URL
+     * @var string
      */
-    public $logo;
+    public $updated_date = '';
+
+    /**
+     * @var number
+     */
+    public $member_count;
+
+    /**
+     * @var string
+     */
+    public $initial = '';
 
     /**
      * @inheritdoc
@@ -44,9 +52,11 @@ class CompanyItem extends BaseItem
 
         $company->id = $rawCompany['_id'];
         $company->name = $rawCompany['name'];
-        $company->description = $rawCompany['description'];
-        $company->url = $rawCompany['url'];
-        $company->logo = $rawCompany['logo_url'];
+        $company->friendly_id = $rawCompany['friendly_id'];
+        $company->creation_date = $rawCompany['creation_date'];
+        $company->updated_date = $rawCompany['updated_date'];
+        $company->member_count = $rawCompany['member_count'];
+        $company->initial = $rawCompany['initial'];
 
         return $company;
     }

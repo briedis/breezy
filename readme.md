@@ -65,13 +65,12 @@ $resume = $breezy->uploadResume($companyId, '/path/to/resume.pdf', 'my-resume.pd
 
 // Set candidate data
 $candidate = new \Briedis\Breezy\Structures\CandidateItem;
-$candidate->companyId = $companyId;
 $candidate->name = 'Candidate Name';
-$candidate->phoneNumber = '1234567890';
-$candidate->email = 'candidate@email';
+$candidate->phone_number = '1234567890';
+$candidate->email_address = 'candidate@email';
 
 // Create the candidate (resume is optional)
-$createdCandidate = $breezy->addCandidate($candidate, $resume);
+$createdCandidate = $breezy->addCandidate($companyId, candidate, $resume);
 
 
 /*
@@ -83,7 +82,7 @@ $position->name = 'Position name';
 $position->description = '<h1>Description</h1>';
 $position->state = \Briedis\Breezy\Structures\PositionItem::STATE_PUBLISHED;
 
-$breezy->createPosition($position);
+$breezy->createPosition($companyId, $position);
 
 
 /*

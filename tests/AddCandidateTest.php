@@ -5,7 +5,6 @@ namespace Briedis\Breezy\Tests;
 
 
 use Briedis\Breezy\Structures\CandidateItem;
-use Briedis\Breezy\Structures\ResumeItem;
 
 class AddCandidateTest extends TestBase
 {
@@ -15,16 +14,13 @@ class AddCandidateTest extends TestBase
         $breezy = $this->breezy();
 
         $candidate = new CandidateItem;
-
-        $candidate->companyId = Credentials::$companyId;
-        $candidate->positionId = Credentials::$positionId;
-
         $candidate->name = 'API Test Candidate ' . date('Y-m-d H:i:s');
-        $candidate->status = CandidateItem::STATUS_APPLIED;
+        $candidate->origin = CandidateItem::ORIGIN_SOURCED; // ORIGIN_APPLIED
         $candidate->summary = "Test summary\nNew line";
-        $candidate->phoneNumber = '12345667890';
+        $candidate->phone_number = '12345667890';
+        $candidate->email_address = date('Y-m-d H:i:s') . '@example.com';
 
-        $newCandidate = $breezy->addCandidate($candidate);
+        $newCandidate = $breezy->addCandidate(Credentials::$companyId, Credentials::$positionId, $candidate);
 
         self::assertNotNull($newCandidate->id);
         self::assertEquals($candidate->name, $newCandidate->name);
@@ -34,22 +30,25 @@ class AddCandidateTest extends TestBase
     {
         $breezy = $this->breezy();
 
+        $candidate = new CandidateItem;
+        $candidate->name = 'API Test Candidate with resume ' . date('Y-m-d H:i:s');
+        $candidate->origin = CandidateItem::ORIGIN_SOURCED;
+
+        $newCandidate = $breezy->addCandidate(Credentials::$companyId, Credentials::$positionId, $candidate);
+
+        self::assertNotNull($newCandidate->id);
+
         $resume = $breezy->uploadResume(
             Credentials::$companyId,
+            Credentials::$positionId,
+            $newCandidate->id,
             __DIR__ . '/resources/sample-resume.pdf',
             'my-test-resume.pdf'
         );
 
-        self::assertInstanceOf(ResumeItem::class, $resume);
-
-        $candidate = new CandidateItem;
-        $candidate->companyId = Credentials::$companyId;
-        $candidate->positionId = Credentials::$positionId;
-        $candidate->name = 'API Test Candidate with resume ' . date('Y-m-d H:i:s');
-
-        $candidateReturn = $breezy->addCandidate($candidate, $resume);
-
-        self::assertNotNull($candidateReturn->resumeUrl);
-        self::assertNotNull($candidateReturn->resumeUrlPdf);
+        // TODO: HOW TO TEST?
+        // self::assertNotNull($newCandidate->resume['url']);
+        // self::assertNotNull($newCandidate->resume['pdf_url']);
+        // self::assertEquals($newCandidate->resume, $candidate->resume);
     }
 }

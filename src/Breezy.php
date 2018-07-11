@@ -8,7 +8,6 @@ use Briedis\Breezy\Exceptions\BreezyException;
 use Briedis\Breezy\Structures\CandidateItem;
 use Briedis\Breezy\Structures\CompanyItem;
 use Briedis\Breezy\Structures\PositionItem;
-use Briedis\Breezy\Structures\ResumeItem;
 
 class Breezy
 {
@@ -16,7 +15,7 @@ class Breezy
      * List of allowed extensions for the resume
      * @var array
      */
-    public static $allowedResumeExtensions = ['pdf', 'doc', 'docx', 'txt', 'rtf'];
+    public static $allowedFileExtensions = ['pdf', 'doc', 'docx', 'txt', 'rtf'];
 
     /** @var BreezyApiClient */
     protected $api;
@@ -51,6 +50,7 @@ class Breezy
     public function getCompany($companyId)
     {
         $response = $this->api->get('company/' . $companyId . '/'); // Trailing slash is needed for this request until it's fixed
+
         return CompanyItem::fromArray($response);
     }
 
@@ -68,116 +68,117 @@ class Breezy
             $params['state'] = $state;
         }
 
-        $response = $this->api->get('company/' . $companyId . '/positions', $params);
+        $response = $this->api->get('company/' . $companyId . '/positions/', $params);
 
-        $re = [];
+        $positions = [];
 
-        foreach ($response as $v) {
-            $re[] = PositionItem::fromArray($v);
+        foreach ($response as $position) {
+            $positions[] = PositionItem::fromArray($position);
         }
 
-        return $re;
+        return $positions;
     }
 
     /**
-     * @param CandidateItem $candidate
-     * @param ResumeItem $resume Optional resume
+     * Get candidate
+     * @param string $companyId
+     * @param string $positionId
+     * @param string $candidateId
      * @return CandidateItem
      */
-    public function addCandidate(CandidateItem $candidate, ResumeItem $resume = null)
+    public function getCandidate($companyId, $positionId, $candidateId)
     {
-        $path = '/company/' . $candidate->companyId . '/position/' . $candidate->positionId . '/candidates';
+        $response = $this->api->get('company/' . $companyId . '/position/' . $positionId . '/candidate/' . $candidateId);
 
-        $data = [
-            'name' => $candidate->name,
-            'email_address' => $candidate->email,
-            'phone_number' => $candidate->phoneNumber,
-            'summary' => $candidate->summary,
-            'status' => $candidate->status,
-        ];
+        $candidate = CandidateItem::fromArray($response);
 
-        if ($resume) {
-            $data['resume'] = [
-                'url' => $resume->url,
-            ];
-        }
-
-        $rawCandidate = $this->api->post($path, $data);
-
-        return CandidateItem::fromArray($rawCandidate);
+        return $candidate;
     }
 
     /**
-     * Create a new resume file, which can later be used when adding a candidate to a position
+     * Add candidate
      * @param string $companyId
+     * @param string $positionId
+     * @param CandidateItem $candidate
+     * @return CandidateItem
+     */
+    public function addCandidate($companyId, $positionId, CandidateItem $candidate)
+    {
+        $response = $this->api->post('/company/' . $companyId . '/position/' . $positionId . '/candidates', $candidate);
+
+        return CandidateItem::fromArray($response);
+    }
+
+    /**
+     * Upload resume file for candidate
+     * @param string $companyId
+     * @param string $positionId
+     * @param string $candidateId
      * @param string $pathname Full path to the file
      * @param string $filename Actual files filename that will appear in the system
-     * @return ResumeItem
      * @throws BreezyException
+     * @return mixed
      */
-    public function uploadResume($companyId, $pathname, $filename)
+    public function uploadResume($companyId, $positionId, $candidateId, $pathname, $filename)
     {
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-        if (!in_array($extension, self::$allowedResumeExtensions, true)) {
-            throw new BreezyException(
-                'Extension "' . $extension . '" is not within allowed list: '
-                . implode(', ', self::$allowedResumeExtensions)
-            );
+        if (!in_array($extension, self::$allowedFileExtensions, true)) {
+            throw new BreezyException('Extension "' . $extension . '" is not within allowed list: ' . implode(', ', self::$allowedFileExtensions));
         }
 
-        $response = $this->api->uploadFile(
-            'company/' . $companyId . '/upload/resume',
-            $pathname,
-            $filename
-        );
+        $response = $this->api->uploadFile('company/' . $companyId . '/position/' . $positionId . '/candidate/' . $candidateId . '/resume', $pathname, $filename);
 
-        return ResumeItem::fromArray($response);
+        return $response;
+    }
+
+    /**
+     * Upload document for candidate
+     * @param string $companyId
+     * @param string $positionId
+     * @param string $candidateId
+     * @param string $pathname Full path to the file
+     * @param string $filename Actual files filename that will appear in the system
+     * @throws BreezyException
+     * @return array
+     */
+    public function uploadDocument($companyId, $positionId, $candidateId, $pathname, $filename)
+    {
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+        if (!in_array($extension, self::$allowedFileExtensions, true)) {
+            throw new BreezyException('Extension "' . $extension . '" is not within allowed list: ' . implode(', ', self::$allowedFileExtensions));
+        }
+
+        $response = $this->api->uploadFile('company/' . $companyId . '/position/' . $positionId . '/candidate/' . $candidateId . '/documents', $pathname, $filename);
+
+        return $response;
+    }
+
+    /**
+     * Get candidate documents
+     * @param string $companyId
+     * @param string $positionId
+     * @param string $candidateId
+     * @return array
+     */
+    public function getDocuments($companyId, $positionId, $candidateId)
+    {
+        $response = $this->api->get('company/' . $companyId . '/position/' . $positionId . '/candidate/' . $candidateId . '/documents/');
+
+        return $response;
     }
 
     /**
      * Newly created position
+     * @param string $companyId
      * @param PositionItem $position
      * @throws BreezyException
      * @return PositionItem Created position from backend
      */
-    public function createPosition(PositionItem $position)
+    public function createPosition($companyId, PositionItem $position)
     {
-        if (!$position->companyId) {
-            throw new BreezyException('Company id is not set');
-        }
-
-        $data = [
-            'name' => $position->name,
-            'description' => $position->description,
-            'state' => $position->state,
-            'type' => [
-                'id' => 'fullTime',
-                'name' => 'Full-Time',
-            ],
-        ];
-
-        $location = $position->location;
-        if ($location) {
-            $rawLocation = [
-                'country' => [
-                    'id' => $location->countryCode,
-                    'name' => $location->countryName,
-                ],
-            ];
-            if ($location->city) {
-                $rawLocation['city'] = $location->city;
-            }
-            if ($location->stateName) {
-                $rawLocation['state'] = [
-                    'id' => $location->stateCode,
-                    'name' => $location->stateName,
-                ];
-            }
-            $data['location'] = $rawLocation;
-        }
-
-        $response = $this->api->post('company/' . $position->companyId . '/positions', $data);
+        $response = $this->api->post('company/' . $companyId . '/positions', $position);
 
         return PositionItem::fromArray($response);
     }
