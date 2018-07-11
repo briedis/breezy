@@ -11,6 +11,7 @@ Installation using Composer:
 
 See /examples/ folder:
 
-* getCurrentPositions.php - Example of getting company positions
 * addCandidateWithFiles.php - Add candidate, with resume and other files
+* addPosition.php - Add new position
 * customCache.php - Implement your own caching class if you want to use the cached driver
+* getCurrentPositions.php - Example of getting company positions
