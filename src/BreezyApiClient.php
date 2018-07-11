@@ -13,7 +13,7 @@ class BreezyApiClient
     /**
      * @var string
      */
-    public $url = 'https://breezy.hr/public/api/v2/';
+    public $url = 'https://breezy.hr/public/api/v3/';
 
     /**
      * Last JSON encoded response
@@ -158,7 +158,8 @@ class BreezyApiClient
         ]);
         curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
         curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 60);
         curl_setopt($curl, CURLOPT_POSTFIELDS, ['file' => $curlFile]);
 
         return $this->execute($curl);
@@ -181,7 +182,7 @@ class BreezyApiClient
         curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
 
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 20);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 
         curl_setopt($curl, CURLOPT_USERAGENT, self::USER_AGENT);
 
@@ -228,7 +229,19 @@ class BreezyApiClient
         $response = json_decode($responseRaw, true);
 
         if ($responseCode >= 400 || !empty($response['error'])) {
-            throw new BreezyApiException($response['error'], $responseCode);
+            $error = [];
+
+            if (is_array($response)) {
+                $response += ['error' => []];
+                $error = $response['error'];
+            }
+
+            $error += [
+                'type' => 'Unknown type',
+                'message' => 'Unknown message',
+            ];
+
+            throw new BreezyApiException($error['type'] . ': ' . $error['message'], $responseCode);
         }
 
         $this->lastResponse = $response;

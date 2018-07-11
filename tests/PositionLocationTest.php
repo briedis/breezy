@@ -15,19 +15,18 @@ class PositionLocationTest extends TestBase
 
         $position = $this->getPosition();
 
-        $location = new LocationItem;
-        $location->countryCode = 'LV';
-        $location->countryName = 'Latvia';
-        $location->city = 'Riga';
+        $location = [
+            'country' => 'LV',
+            'city' => 'Riga',
+        ];
 
         $position->location = $location;
 
-        $created = $breezy->createPosition($position);
+        $created = $breezy->createPosition(Credentials::$companyId, $position);
 
-        self::assertEquals($location->countryName, $created->location->countryName);
-        self::assertEquals($location->countryCode, $created->location->countryCode);
-        self::assertEquals($location->city, $created->location->city);
-        self::assertEquals($location->city . ', ' . $location->countryCode, $created->location->name);
+        self::assertEquals($location['country'], $created->location['country']['id']);
+        self::assertEquals($location['city'], $created->location['city']);
+        self::assertEquals($location['city'] . ', ' . $location['country'], $created->location['name']);
     }
 
     public function testCreationWithState()
@@ -36,18 +35,17 @@ class PositionLocationTest extends TestBase
 
         $position = $this->getPosition();
 
-        $location = new LocationItem;
-        $location->countryCode = 'US';
-        $location->countryName = 'United States';
-        $location->stateName = 'California';
-        $location->stateCode = 'CA';
+        $location = [
+            'country' => 'US',
+            'state' => 'CA',
+        ];
 
         $position->location = $location;
 
-        $created = $breezy->createPosition($position);
+        $created = $breezy->createPosition(Credentials::$companyId, $position);
 
-        self::assertEquals($location->stateName, $created->location->stateName);
-        self::assertEquals($location->stateCode, $created->location->stateCode);
+        self::assertEquals($location['country'], $created->location['country']['id']);
+        self::assertEquals($location['state'], $created->location['state']['id']);
     }
 
     /**
@@ -56,10 +54,13 @@ class PositionLocationTest extends TestBase
     private function getPosition()
     {
         $position = new PositionItem;
-        $position->companyId = Credentials::$companyId;
         $position->name = 'Test API position (' . uniqid(date('r') . '_', true) . ')';
         $position->description = 'Description';
-        $position->state = PositionItem::STATE_CLOSED;
+        $position->state = PositionItem::STATE_DRAFT;
+        $position->type = PositionItem::TYPE_OTHER;
+        $position->category = PositionItem::CATEGORY_OTHER;
+        $position->education = PositionItem::EDUCATION_UNSPECIFIED;
+        $position->experience = PositionItem::EXPERIENCE_NA;
         return $position;
     }
 }

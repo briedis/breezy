@@ -103,17 +103,18 @@ class BreezyCached extends Breezy
 
     /**
      * Newly created position
+     * @param string $companyId
      * @param PositionItem $position
      * @throws BreezyException
      * @return PositionItem Created position from backend
      */
-    public function createPosition(PositionItem $position)
+    public function createPosition($companyId, PositionItem $position)
     {
         $this->cache->forget(
-            $this->getCompanyPositionKey($position->companyId, $position->state)
+            $this->getCompanyPositionKey($companyId, $position->state)
         );
 
-        return parent::createPosition($position);
+        return parent::createPosition($companyId, $position);
     }
 
     /**

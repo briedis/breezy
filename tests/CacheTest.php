@@ -84,16 +84,23 @@ class CacheTest extends TestBase
         $this->apiMock->shouldReceive('get')->twice()->passthru();
 
         $position = new PositionItem;
-        $position->companyId = Credentials::$companyId;
-        $position->name = 'Mock Test position ' . date('Y-m-d H:i:s');
-        $position->state = PositionItem::STATE_CLOSED;
+        $position->name = 'Test API position (' . uniqid(date('r') . '_', true) . ')';
         $position->description = 'Description';
+        $position->state = PositionItem::STATE_DRAFT;
+        $position->type = PositionItem::TYPE_OTHER;
+        $position->category = PositionItem::CATEGORY_OTHER;
+        $position->education = PositionItem::EDUCATION_UNSPECIFIED;
+        $position->experience = PositionItem::EXPERIENCE_NA;
+        $position->location = [
+            'country' => 'LV',
+            'city' => 'Riga',
+        ];
 
         $positions = $this->breezy()->getCompanyPositions(Credentials::$companyId, $position->state);
 
-        $this->breezy()->createPosition($position);
+        $this->breezy()->createPosition(Credentials::$companyId, $position);
 
-        $positions2 = $this->breezy()->getCompanyPositions($position->companyId, $position->state);
+        $positions2 = $this->breezy()->getCompanyPositions(Credentials::$companyId, $position->state);
 
         self::assertGreaterThan(count($positions), count($positions2));
     }
