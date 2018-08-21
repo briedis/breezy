@@ -43,9 +43,19 @@ class Breezy
     }
 
     /**
+     * Set authorization token for next requests
+     * @param string $token
+     */
+    public function setToken($token)
+    {
+        $this->api->setToken($token);
+    }
+
+    /**
      * Get company data
      * @param string $companyId
      * @return CompanyItem
+     * @throws BreezyException
      */
     public function getCompany($companyId)
     {
@@ -59,6 +69,7 @@ class Breezy
      * @param string $companyId
      * @param string $state State of the position (draft, archived, etc). By default, returns only published. Pass an empty string if you want all
      * @return PositionItem[]
+     * @throws BreezyException
      */
     public function getCompanyPositions($companyId, $state = PositionItem::STATE_PUBLISHED)
     {
@@ -85,6 +96,7 @@ class Breezy
      * @param string $positionId
      * @param string $candidateId
      * @return CandidateItem
+     * @throws BreezyException
      */
     public function getCandidate($companyId, $positionId, $candidateId)
     {
@@ -101,6 +113,7 @@ class Breezy
      * @param string $positionId
      * @param CandidateItem $candidate
      * @return CandidateItem
+     * @throws BreezyException
      */
     public function addCandidate($companyId, $positionId, CandidateItem $candidate)
     {
@@ -124,10 +137,17 @@ class Breezy
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
         if (!in_array($extension, self::$allowedFileExtensions, true)) {
-            throw new BreezyException('Extension "' . $extension . '" is not within allowed list: ' . implode(', ', self::$allowedFileExtensions));
+            throw new BreezyException(
+                'Extension "' . $extension . '" is not within allowed list: '
+                . implode(', ', self::$allowedFileExtensions)
+            );
         }
 
-        $response = $this->api->uploadFile('company/' . $companyId . '/position/' . $positionId . '/candidate/' . $candidateId . '/resume', $pathname, $filename);
+        $response = $this->api->uploadFile(
+            'company/' . $companyId . '/position/' . $positionId . '/candidate/' . $candidateId . '/resume',
+            $pathname,
+            $filename
+        );
 
         return $response;
     }
@@ -147,10 +167,17 @@ class Breezy
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
         if (!in_array($extension, self::$allowedFileExtensions, true)) {
-            throw new BreezyException('Extension "' . $extension . '" is not within allowed list: ' . implode(', ', self::$allowedFileExtensions));
+            throw new BreezyException(
+                'Extension "' . $extension . '" is not within allowed list: '
+                . implode(', ', self::$allowedFileExtensions)
+            );
         }
 
-        $response = $this->api->uploadFile('company/' . $companyId . '/position/' . $positionId . '/candidate/' . $candidateId . '/documents', $pathname, $filename);
+        $response = $this->api->uploadFile(
+            'company/' . $companyId . '/position/' . $positionId . '/candidate/' . $candidateId . '/documents',
+            $pathname,
+            $filename
+        );
 
         return $response;
     }
