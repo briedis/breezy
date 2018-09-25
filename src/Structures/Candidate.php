@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Briedis\Breezy\Structures;
 
-
-class CandidateItem extends BaseItem
+class Candidate
 {
     const ORIGIN_APPLIED = 'applied';
     const ORIGIN_RECRUITER = 'recruiter';
@@ -151,7 +149,7 @@ class CandidateItem extends BaseItem
      */
     public static function fromArray(array $rawCandidate)
     {
-        $candidate = new CandidateItem;
+        $candidate = new Candidate;
 
         $candidate->rawData = $rawCandidate;
 

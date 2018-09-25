@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Briedis\Breezy\Structures;
 
-
-class PositionItem extends BaseItem
+class Position
 {
     const STATE_DRAFT = 'draft';
     const STATE_CLOSED = 'closed';
@@ -189,7 +187,7 @@ class PositionItem extends BaseItem
      */
     public static function fromArray(array $rawPosition)
     {
-        $position = new PositionItem;
+        $position = new Position;
 
         $position->rawData = $rawPosition;
 

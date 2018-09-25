@@ -7,7 +7,7 @@ namespace Briedis\Breezy\Tests;
 use Briedis\Breezy\BreezyApiClient;
 use Briedis\Breezy\BreezyCached;
 use Briedis\Breezy\CacheAdapterInterface;
-use Briedis\Breezy\Structures\PositionItem;
+use Briedis\Breezy\Structures\Position;
 use Mockery;
 
 class CacheTest extends TestBase
@@ -83,14 +83,14 @@ class CacheTest extends TestBase
 
         $this->apiMock->shouldReceive('get')->twice()->passthru();
 
-        $position = new PositionItem;
+        $position = new Position;
         $position->name = 'Test API position (' . uniqid(date('r') . '_', true) . ')';
         $position->description = 'Description';
-        $position->state = PositionItem::STATE_DRAFT;
-        $position->type = PositionItem::TYPE_OTHER;
-        $position->category = PositionItem::CATEGORY_OTHER;
-        $position->education = PositionItem::EDUCATION_UNSPECIFIED;
-        $position->experience = PositionItem::EXPERIENCE_NA;
+        $position->state = Position::STATE_DRAFT;
+        $position->type = Position::TYPE_OTHER;
+        $position->category = Position::CATEGORY_OTHER;
+        $position->education = Position::EDUCATION_UNSPECIFIED;
+        $position->experience = Position::EXPERIENCE_NA;
         $position->location = [
             'country' => 'LV',
             'city' => 'Riga',

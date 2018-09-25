@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Briedis\Breezy\Structures;
 
-
-class CompanyItem extends BaseItem
+class Company
 {
     /**
      * @var string
@@ -46,7 +44,7 @@ class CompanyItem extends BaseItem
      */
     public static function fromArray(array $rawCompany)
     {
-        $company = new CompanyItem;
+        $company = new Company;
 
         $company->rawData = $rawCompany;
 
