@@ -11,7 +11,38 @@ class Company
     private $updated_date;
     private $member_count;
     private $initial;
+
+
     public static function fromResponse(array $rawCompany)
+    {
+        $id = $rawCompany['_id'];
+        $name = $rawCompany['name'];
+        $friendly_id = $rawCompany['friendly_id'];
+        $creation_date = $rawCompany['creation_date'];
+        $updated_date = $rawCompany['updated_date'];
+        $member_count = $rawCompany['member_count'];
+        $initial = $rawCompany['initial'];
+
+        return new Company($id, $name, $friendlyId, $creationDate, $updatedDate, $memberCount, $initial);
+    }
+
+    private function __construct(
+        $id,
+        $name,
+        $friendlyId,
+        $creationDate,
+        $updatedDate,
+        $memberCount,
+        $initial
+    ) {
+        $this->id = $id;
+        $this->name = $name;
+        $this->friendlyId = $friendlyId;
+        $this->creationDate = $creationDate;
+        $this->updatedDate = $updatedDate;
+        $this->memberCount = $memberCount;
+        $this->initial = $initial;
+    }
 
     /**
      * @return mixed
@@ -62,21 +93,10 @@ class Company
     }
 
     /**
-     * @inheritdoc
+     * @return mixed
      */
+    public function getInitial()
     {
-        $company = new Company;
-
-        $company->rawData = $rawCompany;
-
-        $company->id = $rawCompany['_id'];
-        $company->name = $rawCompany['name'];
-        $company->friendly_id = $rawCompany['friendly_id'];
-        $company->creation_date = $rawCompany['creation_date'];
-        $company->updated_date = $rawCompany['updated_date'];
-        $company->member_count = $rawCompany['member_count'];
-        $company->initial = $rawCompany['initial'];
-
-        return $company;
+        return $this->initial;
     }
 }
