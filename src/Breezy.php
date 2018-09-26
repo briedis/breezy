@@ -88,6 +88,19 @@ class Breezy
         return $positions;
     }
 
+    public function getPositionCandidates($companyId, $positionId)
+    {
+        $response = $this->api->get('company/' . $companyId . '/position/' . $positionId . '/candidates');
+
+        $candidates = [];
+
+        foreach ($response as $candidate) {
+            $candidates[] = Candidate::fromResponse($candidate);
+        }
+
+        return $candidates;
+    }
+
     /**
      * Get candidate
      * @param string $companyId
