@@ -9,140 +9,34 @@ class Candidate
     const ORIGIN_REFERRAL = 'referral';
     const ORIGIN_SOURCED = 'sourced';
 
-    /**
-     * @var string
-     */
-    public $id = '';
-
-    /**
-     * @var string
-     */
-    public $address = '';
-
-    /**
-     * @var array
-     */
-    public $assigned_to = [];
-
-    /**
-     * @var string
-     */
-    public $cover_letter = '';
-
-    /**
-     * @var string
-     */
-    public $creation_date = '';
-
-    /**
-     * @var array
-     */
-    public $education = [];
-
-    /**
-     * @var string
-     */
-    public $email_address = '';
-
-    /**
-     * @var string
-     */
-    public $followed_by = '';
-
-    /**
-     * @var string
-     */
-    public $headline = '';
-
-    /**
-     * @var string
-     */
-    public $initial = '';
-
-    /**
-     * @var string
-     */
-    public $name = '';
-
-    /**
-     * @var string
-     */
-    public $origin = '';
-
-    /**
-     * @var array
-     */
-    public $overall_score = [];
-
-    /**
-     * @var string
-     */
-    public $phone_number = '';
-
-    /**
-     * @var string
-     */
-    public $profile_photo_url = '';
-
-    /**
-     * @var array
-     */
-    public $questionnaire = [];
-
-    /**
-     * @var array
-     */
-    public $recruited_by = [];
-
-    /**
-     * @var array
-     */
-    public $referred_by = [];
-
-    /**
-     * @var array
-     */
-    public $sourced_by = [];
-
-    /**
-     * @var array
-     */
-    public $resume = [];
-
-    /**
-     * @var array
-     */
-    public $social_profiles = [];
-
-    /**
-     * @var array
-     */
-    public $source = [];
-
-    /**
-     * @var array
-     */
-    public $stage = [];
-
-    /**
-     * @var string
-     */
-    public $summary = '';
-
-    /**
-     * @var array
-     */
-    public $tags = [];
-
-    /**
-     * @var string
-     */
-    public $updated_date = '';
-
-    /**
-     * @var array
-     */
-    public $work_history = [];
+    private $_id;
+    private $address;
+    private $assigned_to;
+    private $cover_letter;
+    private $creation_date;
+    private $education;
+    private $email_address;
+    private $followed_by;
+    private $headline;
+    private $initial;
+    private $name;
+    private $origin;
+    private $overall_score;
+    private $phone_number;
+    private $profile_photo_url;
+    private $questionnaire;
+    private $recruited_by;
+    private $referred_by;
+    private $sourced_by;
+    private $resume;
+    private $social_profiles;
+    private $source;
+    private $stage;
+    private $summary;
+    private $tags;
+    private $updated_date;
+    private $work_history;
+    private $custom_attributes;
 
     public static function fromResponse(array $rawCandidate)
     {
