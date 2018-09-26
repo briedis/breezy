@@ -4,41 +4,62 @@ namespace Briedis\Breezy\Structures;
 
 class Company
 {
-    /**
-     * @var string
-     */
-    public $id = '';
+    private $id;
+    private $name;
+    private $friendly_id;
+    private $creation_date;
+    private $updated_date;
+    private $member_count;
+    private $initial;
     public static function fromResponse(array $rawCompany)
 
     /**
-     * @var string
+     * @return mixed
      */
-    public $name = '';
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
-     * @var string
+     * @return mixed
      */
-    public $friendly_id = '';
+    public function getName()
+    {
+        return $this->name;
+    }
 
     /**
-     * @var string
+     * @return mixed
      */
-    public $creation_date = '';
+    public function getFriendlyId()
+    {
+        return $this->friendly_id;
+    }
 
     /**
-     * @var string
+     * @return mixed
      */
-    public $updated_date = '';
+    public function getCreationDate()
+    {
+        return $this->creation_date;
+    }
 
     /**
-     * @var number
+     * @return mixed
      */
-    public $member_count;
+    public function getUpdatedDate()
+    {
+        return $this->updated_date;
+    }
 
     /**
-     * @var string
+     * @return mixed
      */
-    public $initial = '';
+    public function getMemberCount()
+    {
+        return $this->member_count;
+    }
 
     /**
      * @inheritdoc
