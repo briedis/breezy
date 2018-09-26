@@ -62,7 +62,7 @@ class BreezyCached extends Breezy
 
         $rawCompany = $this->cache->get($key);
         if (is_array($rawCompany)) {
-            return Company::fromArray($rawCompany);
+            return Company::fromResponse($rawCompany);
         }
 
         $company = parent::getCompany($companyId);
@@ -86,7 +86,7 @@ class BreezyCached extends Breezy
 
         if (is_array($rawPositions)) {
             return array_map(function (array $rawPosition) {
-                return Position::fromArray($rawPosition);
+                return Position::fromResponse($rawPosition);
             }, $rawPositions);
         }
 

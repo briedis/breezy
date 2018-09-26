@@ -36,7 +36,7 @@ class Breezy
     public function signIn($email, $password)
     {
         $token = $this->api->signIn($email, $password);
-
+        
         return $token;
     }
 
@@ -59,7 +59,7 @@ class Breezy
     {
         $response = $this->api->get('company/' . $companyId . '/'); // Trailing slash is needed for this request until it's fixed
 
-        return Company::fromArray($response);
+        return Company::fromResponse($response);
     }
 
     /**
@@ -82,7 +82,7 @@ class Breezy
         $positions = [];
 
         foreach ($response as $position) {
-            $positions[] = Position::fromArray($position);
+            $positions[] = Position::fromResponse($position);
         }
 
         return $positions;
@@ -100,7 +100,7 @@ class Breezy
     {
         $response = $this->api->get('company/' . $companyId . '/position/' . $positionId . '/candidate/' . $candidateId);
 
-        $candidate = Candidate::fromArray($response);
+        $candidate = Candidate::fromResponse($response);
 
         return $candidate;
     }
@@ -117,7 +117,7 @@ class Breezy
     {
         $response = $this->api->post('/company/' . $companyId . '/position/' . $positionId . '/candidates', $candidate);
 
-        return Candidate::fromArray($response);
+        return Candidate::fromResponse($response);
     }
 
     /**
@@ -205,6 +205,6 @@ class Breezy
     {
         $response = $this->api->post('company/' . $companyId . '/positions', $position);
 
-        return Position::fromArray($response);
+        return Position::fromResponse($response);
     }
 }

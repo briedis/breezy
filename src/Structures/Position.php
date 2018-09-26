@@ -63,6 +63,10 @@ class Position
     const EXPERIENCE_SENIOR_LEVEL = 'senior-level';
     const EXPERIENCE_EXECUTIVE = 'executive';
 
+
+    public static function fromResponse(array $rawPosition)
+
+
     /**
      * @var string
      */
@@ -185,7 +189,6 @@ class Position
     /**
      * @inheritdoc
      */
-    public static function fromArray(array $rawPosition)
     {
         $position = new Position;
 

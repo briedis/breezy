@@ -147,7 +147,7 @@ class Candidate
     /**
      * @inheritdoc
      */
-    public static function fromArray(array $rawCandidate)
+    public static function fromResponse(array $rawCandidate)
     {
         $candidate = new Candidate;
 

@@ -8,6 +8,7 @@ class Company
      * @var string
      */
     public $id = '';
+    public static function fromResponse(array $rawCompany)
 
     /**
      * @var string
@@ -42,7 +43,6 @@ class Company
     /**
      * @inheritdoc
      */
-    public static function fromArray(array $rawCompany)
     {
         $company = new Company;
 
