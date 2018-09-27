@@ -4,7 +4,7 @@
 namespace Briedis\Breezy\Tests;
 
 
-use Briedis\Breezy\Structures\PositionItem;
+use Briedis\Breezy\Structures\Position;
 
 class PositionTest extends TestBase
 {
@@ -12,23 +12,23 @@ class PositionTest extends TestBase
     {
         $breezy = $this->breezy();
 
-        $position = new PositionItem;
+        $position = new Position;
         $position->name = 'Test API position (' . uniqid(date('r') . '_', true) . ')';
         $position->description = 'Test description';
-        $position->state = PositionItem::STATE_DRAFT;
+        $position->state = Position::STATE_DRAFT;
         $position->location = [
             'country' => 'LV',
             'city' => 'Riga',
         ];
-        $position->type = PositionItem::TYPE_OTHER;
-        $position->category = PositionItem::CATEGORY_OTHER;
-        $position->education = PositionItem::EDUCATION_UNSPECIFIED;
-        $position->experience = PositionItem::EXPERIENCE_NA;
+        $position->type = Position::TYPE_OTHER;
+        $position->category = Position::CATEGORY_OTHER;
+        $position->education = Position::EDUCATION_UNSPECIFIED;
+        $position->experience = Position::EXPERIENCE_NA;
 
         $created = $breezy->createPosition(Credentials::$companyId, $position);
 
         self::assertNotNull($created->id);
-        self::assertEquals(PositionItem::STATE_DRAFT, $created->state);
+        self::assertEquals(Position::STATE_DRAFT, $created->state);
     }
 
     public function testGetAllPositions()
@@ -47,11 +47,11 @@ class PositionTest extends TestBase
     {
         $breezy = $this->breezy();
 
-        $positions = $breezy->getCompanyPositions(Credentials::$companyId, PositionItem::STATE_PUBLISHED);
+        $positions = $breezy->getCompanyPositions(Credentials::$companyId, Position::STATE_PUBLISHED);
 
         // If there is a position, it should have a published state
         foreach ($positions as $position) {
-            self::assertEquals(PositionItem::STATE_PUBLISHED, $position->state);
+            self::assertEquals(Position::STATE_PUBLISHED, $position->state);
         }
     }
 }

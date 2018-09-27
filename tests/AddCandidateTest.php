@@ -4,7 +4,7 @@
 namespace Briedis\Breezy\Tests;
 
 
-use Briedis\Breezy\Structures\CandidateItem;
+use Briedis\Breezy\Structures\Candidate;
 
 class AddCandidateTest extends TestBase
 {
@@ -13,9 +13,9 @@ class AddCandidateTest extends TestBase
     {
         $breezy = $this->breezy();
 
-        $candidate = new CandidateItem;
+        $candidate = new Candidate;
         $candidate->name = 'API Test Candidate ' . date('Y-m-d H:i:s');
-        $candidate->origin = CandidateItem::ORIGIN_SOURCED; // ORIGIN_APPLIED
+        $candidate->origin = Candidate::ORIGIN_SOURCED; // ORIGIN_APPLIED
         $candidate->summary = "Test summary\nNew line";
         $candidate->phone_number = '12345667890';
         $candidate->email_address = date('Y-m-d H:i:s') . '@example.com';
@@ -30,9 +30,9 @@ class AddCandidateTest extends TestBase
     {
         $breezy = $this->breezy();
 
-        $candidate = new CandidateItem;
+        $candidate = new Candidate;
         $candidate->name = 'API Test Candidate with resume ' . date('Y-m-d H:i:s');
-        $candidate->origin = CandidateItem::ORIGIN_SOURCED;
+        $candidate->origin = Candidate::ORIGIN_SOURCED;
 
         $newCandidate = $breezy->addCandidate(Credentials::$companyId, Credentials::$positionId, $candidate);
 

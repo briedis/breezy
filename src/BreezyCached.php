@@ -5,8 +5,8 @@ namespace Briedis\Breezy;
 
 
 use Briedis\Breezy\Exceptions\BreezyException;
-use Briedis\Breezy\Structures\CompanyItem;
-use Briedis\Breezy\Structures\PositionItem;
+use Briedis\Breezy\Structures\Company;
+use Briedis\Breezy\Structures\Position;
 
 /**
  * Class that wraps Breezy and allows to add a cached layer for methods to get token, positions etc.
@@ -54,7 +54,7 @@ class BreezyCached extends Breezy
     /**
      * Get company data
      * @param string $companyId
-     * @return CompanyItem
+     * @return Company
      */
     public function getCompany($companyId)
     {
@@ -62,7 +62,7 @@ class BreezyCached extends Breezy
 
         $rawCompany = $this->cache->get($key);
         if (is_array($rawCompany)) {
-            return CompanyItem::fromArray($rawCompany);
+            return Company::fromResponse($rawCompany);
         }
 
         $company = parent::getCompany($companyId);
@@ -76,9 +76,9 @@ class BreezyCached extends Breezy
      * Get positions
      * @param string $companyId
      * @param string $state State of the position (draft, archived, etc). By default, returns only published. Pass an empty string if you want all
-     * @return PositionItem[]
+     * @return Position[]
      */
-    public function getCompanyPositions($companyId, $state = PositionItem::STATE_PUBLISHED)
+    public function getCompanyPositions($companyId, $state = Position::STATE_PUBLISHED)
     {
         $key = $this->getCompanyPositionKey($companyId, $state);
 
@@ -86,13 +86,13 @@ class BreezyCached extends Breezy
 
         if (is_array($rawPositions)) {
             return array_map(function (array $rawPosition) {
-                return PositionItem::fromArray($rawPosition);
+                return Position::fromResponse($rawPosition);
             }, $rawPositions);
         }
 
         $positions = parent::getCompanyPositions($companyId, $state);
 
-        $rawPositions = array_map(function (PositionItem $position) {
+        $rawPositions = array_map(function (Position $position) {
             return $position->rawData;
         }, $positions);
 
@@ -104,11 +104,11 @@ class BreezyCached extends Breezy
     /**
      * Newly created position
      * @param string $companyId
-     * @param PositionItem $position
+     * @param Position $position
      * @throws BreezyException
-     * @return PositionItem Created position from backend
+     * @return Position Created position from backend
      */
-    public function createPosition($companyId, PositionItem $position)
+    public function createPosition($companyId, Position $position)
     {
         $this->cache->forget(
             $this->getCompanyPositionKey($companyId, $position->state)

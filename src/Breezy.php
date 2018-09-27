@@ -1,13 +1,11 @@
 <?php
 
-
 namespace Briedis\Breezy;
 
-
 use Briedis\Breezy\Exceptions\BreezyException;
-use Briedis\Breezy\Structures\CandidateItem;
-use Briedis\Breezy\Structures\CompanyItem;
-use Briedis\Breezy\Structures\PositionItem;
+use Briedis\Breezy\Structures\Candidate;
+use Briedis\Breezy\Structures\Company;
+use Briedis\Breezy\Structures\Position;
 
 class Breezy
 {
@@ -38,7 +36,7 @@ class Breezy
     public function signIn($email, $password)
     {
         $token = $this->api->signIn($email, $password);
-
+        
         return $token;
     }
 
@@ -54,24 +52,24 @@ class Breezy
     /**
      * Get company data
      * @param string $companyId
-     * @return CompanyItem
+     * @return Company
      * @throws BreezyException
      */
     public function getCompany($companyId)
     {
         $response = $this->api->get('company/' . $companyId . '/'); // Trailing slash is needed for this request until it's fixed
 
-        return CompanyItem::fromArray($response);
+        return Company::fromResponse($response);
     }
 
     /**
      * Get positions
      * @param string $companyId
      * @param string $state State of the position (draft, archived, etc). By default, returns only published. Pass an empty string if you want all
-     * @return PositionItem[]
+     * @return Position[]
      * @throws BreezyException
      */
-    public function getCompanyPositions($companyId, $state = PositionItem::STATE_PUBLISHED)
+    public function getCompanyPositions($companyId, $state = Position::STATE_PUBLISHED)
     {
         $params = [];
 
@@ -84,10 +82,23 @@ class Breezy
         $positions = [];
 
         foreach ($response as $position) {
-            $positions[] = PositionItem::fromArray($position);
+            $positions[] = Position::fromResponse($position);
         }
 
         return $positions;
+    }
+
+    public function getPositionCandidates($companyId, $positionId)
+    {
+        $response = $this->api->get('company/' . $companyId . '/position/' . $positionId . '/candidates');
+
+        $candidates = [];
+
+        foreach ($response as $candidate) {
+            $candidates[] = Candidate::fromResponse($candidate);
+        }
+
+        return $candidates;
     }
 
     /**
@@ -95,14 +106,14 @@ class Breezy
      * @param string $companyId
      * @param string $positionId
      * @param string $candidateId
-     * @return CandidateItem
+     * @return Candidate
      * @throws BreezyException
      */
     public function getCandidate($companyId, $positionId, $candidateId)
     {
         $response = $this->api->get('company/' . $companyId . '/position/' . $positionId . '/candidate/' . $candidateId);
 
-        $candidate = CandidateItem::fromArray($response);
+        $candidate = Candidate::fromResponse($response);
 
         return $candidate;
     }
@@ -111,15 +122,15 @@ class Breezy
      * Add candidate
      * @param string $companyId
      * @param string $positionId
-     * @param CandidateItem $candidate
-     * @return CandidateItem
+     * @param Candidate $candidate
+     * @return Candidate
      * @throws BreezyException
      */
-    public function addCandidate($companyId, $positionId, CandidateItem $candidate)
+    public function addCandidate($companyId, $positionId, Candidate $candidate)
     {
         $response = $this->api->post('/company/' . $companyId . '/position/' . $positionId . '/candidates', $candidate);
 
-        return CandidateItem::fromArray($response);
+        return Candidate::fromResponse($response);
     }
 
     /**
@@ -199,14 +210,14 @@ class Breezy
     /**
      * Newly created position
      * @param string $companyId
-     * @param PositionItem $position
+     * @param Position $position
      * @throws BreezyException
-     * @return PositionItem Created position from backend
+     * @return Position Created position from backend
      */
-    public function createPosition($companyId, PositionItem $position)
+    public function createPosition($companyId, Position $position)
     {
         $response = $this->api->post('company/' . $companyId . '/positions', $position);
 
-        return PositionItem::fromArray($response);
+        return Position::fromResponse($response);
     }
 }

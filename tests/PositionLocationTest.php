@@ -5,7 +5,7 @@ namespace Briedis\Breezy\Tests;
 
 
 use Briedis\Breezy\Structures\LocationItem;
-use Briedis\Breezy\Structures\PositionItem;
+use Briedis\Breezy\Structures\Position;
 
 class PositionLocationTest extends TestBase
 {
@@ -49,18 +49,18 @@ class PositionLocationTest extends TestBase
     }
 
     /**
-     * @return PositionItem
+     * @return Position
      */
     private function getPosition()
     {
-        $position = new PositionItem;
+        $position = new Position;
         $position->name = 'Test API position (' . uniqid(date('r') . '_', true) . ')';
         $position->description = 'Description';
-        $position->state = PositionItem::STATE_DRAFT;
-        $position->type = PositionItem::TYPE_OTHER;
-        $position->category = PositionItem::CATEGORY_OTHER;
-        $position->education = PositionItem::EDUCATION_UNSPECIFIED;
-        $position->experience = PositionItem::EXPERIENCE_NA;
+        $position->state = Position::STATE_DRAFT;
+        $position->type = Position::TYPE_OTHER;
+        $position->category = Position::CATEGORY_OTHER;
+        $position->education = Position::EDUCATION_UNSPECIFIED;
+        $position->experience = Position::EXPERIENCE_NA;
         return $position;
     }
 }

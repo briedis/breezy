@@ -1,7 +1,7 @@
 <?php
 
 use \Briedis\Breezy\Breezy;
-use \Briedis\Breezy\Structures\CandidateItem;
+use \Briedis\Breezy\Structures\Candidate;
 
 // Create a regular breezy class, that does not use caching, always calls API
 $breezy = new Breezy();
@@ -16,9 +16,9 @@ $positionId = '000000000';
 $breezy->signIn($email, $password);
 
 // Create candidate
-$candidate = new CandidateItem;
+$candidate = new Candidate;
 $candidate->name = 'John Doe';
-$candidate->origin = CandidateItem::ORIGIN_SOURCED;
+$candidate->origin = Candidate::ORIGIN_SOURCED;
 $candidate->summary = 'This is a new candidate.';
 $candidate->phone_number = '21234567';
 $candidate->email_address = 'candidate@example.com';
