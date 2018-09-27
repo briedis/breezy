@@ -35,7 +35,7 @@ class Position
             $friendly_id,
             $description,
             $questionnaire_id,
-            $scorecard_id,
+            $scorecard_id
         );
     }
 
