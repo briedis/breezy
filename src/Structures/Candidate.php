@@ -4,12 +4,12 @@ namespace Briedis\Breezy\Structures;
 
 class Candidate
 {
+    private $id;
     const ORIGIN_APPLIED = 'applied';
     const ORIGIN_RECRUITER = 'recruiter';
     const ORIGIN_REFERRAL = 'referral';
     const ORIGIN_SOURCED = 'sourced';
 
-    private $_id;
     private $address;
     private $assigned_to;
     private $cover_letter;
@@ -40,7 +40,7 @@ class Candidate
 
     public static function fromResponse(array $rawCandidate)
     {
-        $_id = $rawCandidate['_id'];
+        $id = $rawCandidate['_id'];
         $address = $rawCandidate['address'];
         $assigned_to = $rawCandidate['assigned_to'];
         $cover_letter = $rawCandidate['cover_letter'];
@@ -70,7 +70,7 @@ class Candidate
         $custom_attributes = $rawCandidate['custom_attributes'];
 
         return new Candidate(
-            $_id,
+            $id,
             $address,
             $assigned_to,
             $cover_letter,
@@ -102,7 +102,7 @@ class Candidate
     }
 
     public function __construct(
-        $_id,
+        string $id,
         $address,
         $assigned_to,
         $cover_letter,
@@ -131,7 +131,7 @@ class Candidate
         $work_history,
         $custom_attributes
     ) {
-        $this->_id = $_id;
+        $this->id = $id;
         $this->address = $address;
         $this->assigned_to = $assigned_to;
         $this->cover_letter = $cover_letter;

@@ -10,7 +10,7 @@ class Position
     const STATE_ARCHIVED = 'archived';
     const STATE_PENDING = 'pending';
 
-    private $_id;
+    private $id;
     private $state;
     private $name;
     private $friendly_id;
@@ -20,7 +20,7 @@ class Position
 
     public static function fromResponse(array $rawPosition)
     {
-        $_id = $rawPosition['_id'];
+        $id = $rawPosition['_id'];
         $state = $rawPosition['state'];
         $name = $rawPosition['name'];
         $friendly_id = $rawPosition['friendly_id'];
@@ -29,7 +29,7 @@ class Position
         $scorecard_id = $rawPosition['scorecard_id'];
         
         return new Position(
-            $_id,
+            $id,
             $state,
             $name,
             $friendly_id,
@@ -40,7 +40,7 @@ class Position
     }
 
     public function __construct(
-        string $_id,
+        string $id,
         string $state,
         string $name,
         string $friendly_id,
@@ -48,7 +48,7 @@ class Position
         string $questionnaire_id,
         string $scorecard_id
     ) {
-        $this->_id = $_id;
+        $this->id = $id;
         $this->state = $state;
         $this->name = $name;
         $this->friendly_id = $friendly_id;
@@ -83,7 +83,7 @@ class Position
      */
     public function getId()
     {
-        return $this->_id;
+        return $this->id;
     }
 
     /**
