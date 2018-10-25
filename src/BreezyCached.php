@@ -82,7 +82,7 @@ class BreezyCached extends Breezy
      */
     public function getPosition($companyId, $positionId)
     {
-        $key = 'company:' . $companyId . ':position:' . $positionId;
+        $key = 'position:' . $positionId;
 
         $rawPosition = $this->cache->get($key);
         if (is_array($rawPosition)) {
