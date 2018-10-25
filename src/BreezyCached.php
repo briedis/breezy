@@ -55,6 +55,7 @@ class BreezyCached extends Breezy
      * Get company data
      * @param string $companyId
      * @return CompanyItem
+     * @throws BreezyException
      */
     public function getCompany($companyId)
     {
@@ -73,10 +74,34 @@ class BreezyCached extends Breezy
     }
 
     /**
+     * Get position data
+     * @param $companyId
+     * @param $positionId
+     * @return PositionItem
+     * @throws BreezyException
+     */
+    public function getPosition($companyId, $positionId)
+    {
+        $key = 'position:' . $positionId;
+
+        $rawPosition = $this->cache->get($key);
+        if (is_array($rawPosition)) {
+            return PositionItem::fromArray($rawPosition);
+        }
+
+        $position = parent::getPosition($companyId, $positionId);
+
+        $this->cache->set($key, $position->rawData, 30 * 60);
+
+        return $position;
+    }
+
+    /**
      * Get positions
      * @param string $companyId
      * @param string $state State of the position (draft, archived, etc). By default, returns only published. Pass an empty string if you want all
      * @return PositionItem[]
+     * @throws BreezyException
      */
     public function getCompanyPositions($companyId, $state = PositionItem::STATE_PUBLISHED)
     {
