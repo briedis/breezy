@@ -65,6 +65,20 @@ class Breezy
     }
 
     /**
+     * Get position data
+     * @param $companyId
+     * @param $positionId
+     * @return PositionItem
+     * @throws BreezyException
+     */
+    public function getPosition($companyId, $positionId)
+    {
+        $response = $this->api->get('company/' . $companyId . '/position/' . $positionId . '/');
+
+        return PositionItem::fromArray($response);
+    }
+
+    /**
      * Get positions
      * @param string $companyId
      * @param string $state State of the position (draft, archived, etc). By default, returns only published. Pass an empty string if you want all
