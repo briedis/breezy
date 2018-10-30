@@ -175,6 +175,11 @@ class PositionItem extends BaseItem
      */
     public $candidate_type = '';
 
+    /**
+     * @var string[]
+     */
+    public $tags = [];
+
 
     /**
      * @return bool
@@ -215,6 +220,7 @@ class PositionItem extends BaseItem
         $position->all_admins = $rawPosition['all_admins'];
         $position->pipeline_id = isset($rawPosition['pipeline_id']) ? $rawPosition['pipeline_id'] : null;
         $position->candidate_type = $rawPosition['candidate_type'];
+        $position->tags = isset($rawPosition['tags']) ? $rawPosition['tags'] : [];
 
         return $position;
     }
