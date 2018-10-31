@@ -13,6 +13,8 @@ use Briedis\Breezy\Structures\PositionItem;
  */
 class BreezyCached extends Breezy
 {
+    const PREFIX = 'br:';
+
     /** @var CacheAdapterInterface */
     private $cache;
 
@@ -35,7 +37,7 @@ class BreezyCached extends Breezy
      */
     public function signIn($email, $password)
     {
-        $key = 'token:' . sha1($email . $password);
+        $key = self::PREFIX . 'token:' . sha1($email . $password);
 
         $token = $this->cache->get($key);
 
@@ -59,7 +61,7 @@ class BreezyCached extends Breezy
      */
     public function getCompany($companyId)
     {
-        $key = 'company:' . $companyId;
+        $key = self::PREFIX . 'company:' . $companyId;
 
         $rawCompany = $this->cache->get($key);
         if (is_array($rawCompany)) {
@@ -82,7 +84,7 @@ class BreezyCached extends Breezy
      */
     public function getPosition($companyId, $positionId)
     {
-        $key = 'position:' . $positionId;
+        $key = self::PREFIX . 'position:' . $positionId;
 
         $rawPosition = $this->cache->get($key);
         if (is_array($rawPosition)) {
@@ -149,6 +151,6 @@ class BreezyCached extends Breezy
      */
     private function getCompanyPositionKey($companyId, $state)
     {
-        return 'positions:' . $companyId . ':' . $state;
+        return self::PREFIX . 'positions:' . $companyId . ':' . $state;
     }
 }
