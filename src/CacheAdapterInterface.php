@@ -6,8 +6,6 @@ namespace Briedis\Breezy;
 
 interface CacheAdapterInterface
 {
-    const CACHE_KEY_PREFIX = 'breezy:';
-
     /**
      * Retrieve item from cache
      *
