@@ -13,7 +13,7 @@ class BreezyApiClient
     /**
      * @var string
      */
-    public $url = 'https://api.breezy.hr/public/api/v3/';
+    public $url = 'https://api.breezy.hr/v3/';
 
     /**
      * Last JSON encoded response
