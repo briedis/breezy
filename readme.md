@@ -1,7 +1,7 @@
 [![Latest Stable Version](https://poser.pugx.org/briedis/breezy/v/stable.svg)](https://packagist.org/packages/briedis/breezy)
 [![Latest Unstable Version](https://poser.pugx.org/briedis/breezy/v/unstable.svg)](https://packagist.org/packages/briedis/breezy)
 
-# Simple Breezy PHP API wrapper
+# Breezy PHP API wrapper
 
 Installation using Composer:
 
