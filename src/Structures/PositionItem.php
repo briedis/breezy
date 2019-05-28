@@ -199,7 +199,7 @@ class PositionItem extends BaseItem
         $position->rawData = $rawPosition;
 
         $position->id = $rawPosition['_id'];
-        $position->type = $rawPosition['type'];
+        $position->type = isset($rawPosition['type']) ? $rawPosition['type'] : null;
         $position->state = $rawPosition['state'];
         $position->name = $rawPosition['name'];
         $position->friendly_id = $rawPosition['friendly_id'];
