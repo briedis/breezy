@@ -2,6 +2,7 @@
     "name": "briedis/breezy",
     "description": "Simple breezy.hr API wrapper",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "martins.briedis",
