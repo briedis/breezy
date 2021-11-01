@@ -18,7 +18,7 @@ class CacheTest extends TestBase
     /** @var Mockery\Mock|BreezyApiClient */
     private $apiMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +34,7 @@ class CacheTest extends TestBase
         return new BreezyCached($this->cache, $this->apiMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

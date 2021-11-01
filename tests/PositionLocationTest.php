@@ -4,7 +4,6 @@
 namespace Briedis\Breezy\Tests;
 
 
-use Briedis\Breezy\Structures\LocationItem;
 use Briedis\Breezy\Structures\PositionItem;
 
 class PositionLocationTest extends TestBase
